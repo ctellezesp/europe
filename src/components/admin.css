@@ -1,0 +1,36 @@
+.center-paper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    flex-direction: column;
+}
+
+.center-paper > .MuiFormControl-root {
+    margin: 10px 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+.tags-scroll {
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.tag {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background-color: #e0e0e0;
+    color: black;
+    margin: 0 5px;
+    min-width: 80px;
+    cursor: pointer;
+}

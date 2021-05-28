@@ -1,0 +1,653 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+@font-face{font-family:DFLWeb;src:url('https://www.bundesliga.com/assets/fonts/DFLWeb-Bd.eot')}
+
+@font-face{font-family:PremierSans;src:url('https://www.premierleague.com/resources/prod/b206e35-3315/fonts/PremierLeagueW01-Regular.woff2')}
+
+
+
+
+body {
+    background-color: black;
+    height: 100%;
+    font-family: 'Lato', sans-serif;
+}
+
+.main-body {
+    background-color: black;
+    background: #000428;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #004e92, #000428);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to top, #004e92, #000428); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.uppercase {
+    text-transform: uppercase !important;
+}
+
+.bundesliga {
+    display: flex;
+    flex-direction: column;
+    font-family: DFLWeb,Arial,sans-serif !important;
+}
+
+.bundesliga > * {
+    font-family: DFLWeb,Arial,sans-serif !important;
+}
+
+.bundesliga-header {
+    padding: 10px;
+    background-color: #f2f2f2;
+    display: flex;
+    flex-direction: row;
+}
+
+.bundesliga-header-img {
+    height: 20px;
+    width: auto;
+}
+
+.bundesliga-comp {
+    display: flex;
+    width: 70%;
+}
+
+.bundesliga-title {
+    margin: 0 5px;
+    font-family: DFLWeb,Arial,sans-serif !important;
+}
+
+.bundesliga-md {
+    display: flex;
+    width: 29%;
+    justify-content: flex-end;
+}
+
+.bundesliga-md-text {
+    text-align: right;
+}
+
+.bundesliga-teams{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    background: black;
+}
+
+.bundesliga-team-item {
+    display: flex;
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(117, 117, 117, 0.8);
+}
+
+.bundesliga-home {
+    margin-right: 2px;
+}
+
+.bundesliga-away {
+    margin-left: 2px;
+}
+
+.bundesliga-team-item > img {
+    width: 80%;
+    height: auto;
+}
+
+.bundesliga-footer {
+    display: flex;
+    background-color: darkgray;
+    padding: 10px;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    border-top: 3px solid black;
+}
+
+.stadium-text {
+    text-transform: uppercase;
+}
+
+.laliga {
+    display: flex;
+    flex-direction: column;
+    background-color: #070c10 !important;
+    padding: 0 5px;
+}
+
+.laliga-brand{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    background-color: transparent;
+    color: #f4fccd !important
+}
+
+.laliga-brand > span {
+    padding: 3px;
+    color: white;
+}
+
+.laliga-header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    background-color: #04080c;
+}
+
+.laliga-teamname {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35%;
+    color: #f4fccd;
+    text-align: center;
+}
+
+.laliga-md {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    background-color: #0a1520;
+    color: white;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.laliga-md > span {
+    padding: 10px 0;
+    text-align: center;
+    color: #507f86;
+}
+
+.laliga-equipos {
+    display: flex;
+    flex-direction: row;
+    background-color: #080c0f;
+    width: 100%;
+}
+
+.laliga-home, .laliga-away {
+    display: flex;
+    width: 35%;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #1b2a2e;
+    padding: 10px 0;
+    border-radius: 5px;
+}
+
+.laliga-logo-div {
+    display: flex;
+    width: 30%;
+    justify-content: center;
+    align-items: center;
+    background-color:#0a1520;
+}
+
+.laliga-logo {
+    width: 80%;
+    height: auto;
+}
+
+.ll {
+    display: flex;
+    flex-direction: row;
+    background-color:#090e14;
+    width: 100%;
+}
+
+.laliga-footer{
+    display: flex;
+    width: 100%;
+    padding: 10px 0;
+    justify-content: center;
+    align-items: center;
+    background-color: #09131b;
+    margin: 5px 0;
+}
+
+.laliga-gold {
+    color: #f4fccd !important;
+} 
+
+.bold {
+    font-weight: bold !important;
+}
+
+.seriea {
+    display: flex;
+    flex-direction: column;
+    background-color: #00197d !important;
+}
+
+
+.seriea-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    color: #00eadc;
+    background-color: transparent;
+}
+
+.seriea-teams {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: #00eadc;
+}
+
+.seriea-home, .seriea-away {
+    display: flex;
+    width: 35%;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    background-color: #f2f2f2;
+}
+
+.seriea-team {
+    width: 80%;
+    height: auto;
+}
+
+.seriea-brand {
+    display: flex;
+    width: 30%;
+    justify-content: center;
+    align-items: center;
+    background-color: #00197d;
+}
+
+.ss {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: #00197d;
+}
+
+.seriea-info {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.info-home {
+    display: flex;
+    width: 35%;
+    justify-content: center;
+    align-items: center;
+    background-color: #00197d;
+    padding: 10px 0;
+    color: white;
+    text-align: center;
+}
+
+.info-vs {
+    display: flex;
+    width: 30%;
+    justify-content: center;
+    align-items: center;
+    background-color: #f2f2f2;
+    padding: 10px 0;
+}
+
+.info-away {
+    display: flex;
+    width: 35%;
+    justify-content: center;
+    align-items: center;
+    background-color: #00eadc;
+    padding: 10px 0;
+    color: #00197d;
+    text-align: center;
+}
+
+.seriea-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #00197d;
+    padding: 5px 0;
+    color: #00eadc;
+}
+
+.premier {
+    display: flex;
+    flex-direction: column;
+    background-color: #37003c !important;
+    font-family: PremierSans,Arial,Helvetica,Helvetica,sans-serif !important;
+}
+
+.premier > * {
+    font-family: PremierSans,Arial,Helvetica,Helvetica,sans-serif !important;
+}
+
+.premier-header {
+    display: flex;
+    justify-content: center;
+    background-color: #37003c;
+    color: white;
+    padding: 10px 0;
+}
+
+.premier-header > img {
+    height: 20px;
+    width: 20px;
+    margin: 0 5px;
+}
+
+.pl-body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 20px 0;
+    background-color: #37003c;
+}
+
+.premier-home {
+    display: flex;
+    flex-direction: row;
+    width: 60%;
+    margin-left: 10%;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
+}
+
+.premier-away {
+    display: flex;
+    flex-direction: row;
+    width: 60%;
+    margin-left: 30%;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
+}
+
+.pl-tag {
+    display: flex;
+    color: white;
+    background-color: #e90052;
+    width: 80%;
+    height: 100%;
+    align-items: center;
+    padding-left: 10px;
+    letter-spacing: 2px;
+}
+
+.pl-img {
+    display: flex;
+    width: 20%;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+
+}
+
+.pl-img > img { 
+    width: 90%;
+    height: auto;
+}
+
+.premier-stadium {
+    display: flex;
+    height: 20px;
+    width: 45%;
+    background-color: #f2f2f2;
+    align-items: center;
+    margin-left: 10%;
+    font-size: 0.8rem;
+}
+
+.premier-stadium > span {
+    margin-left: 10px;
+    color: #37003c;
+}
+
+.pl-footer {
+    display: flex;
+    padding: 10px 0;
+    justify-content: center;
+    align-items: center;
+    background-color: #01fd8d;
+    color: #36003c;
+}
+
+.logo-main {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.img-main {
+    width: 80%;
+    height: auto;
+}
+
+.epl-main {
+    background-color: #e90052 !important;
+}
+
+.epl-main:hover {
+    background-color: #01fe87 !important;
+    animation: fadein 1s;
+    -moz-animation: fadein 1s; /* Firefox */
+    -webkit-animation: fadein 1s; /* Safari and Chrome */
+    -o-animation: fadein 1s; /* Opera */
+}
+
+.epl-main:hover > img {
+    animation: zoom 1s;
+}
+
+.bundesliga-main {
+    overflow-x: hidden;
+}
+
+.bundesliga-main:hover {
+    background-color: #e5e5e5 !important;
+    animation: fadein 1s;
+    -moz-animation: fadein 1s; /* Firefox */
+    -webkit-animation: fadein 1s; /* Safari and Chrome */
+    -o-animation: fadein 1s; /* Opera */
+}
+
+.bundesliga-main:hover > img {
+    animation: run 1.5s infinite linear;
+}
+
+.laliga-mn{
+    background-color:#0b1216 !important;
+}
+
+.laliga-mn:hover {
+    background-color: #254150 !important;
+    animation: fadein 1s;
+    -moz-animation: fadein 1s; /* Firefox */
+    -webkit-animation: fadein 1s; /* Safari and Chrome */
+    -o-animation: fadein 1s; /* Opera */
+}
+
+.laliga-mn:hover > img {
+    animation: heartbeat 1s infinite;
+}
+
+.seriea-mn {
+    background-color: #00197d !important;
+    background-position: bottom;
+    transition: transform 1s;
+}
+
+.seriea-mn:hover {
+    background-image: url('http://www.legaseriea.it/assets/legaseriea/images/sfondo_news.jpg?v=2');
+}
+
+.seriea-mn:hover > img {
+    animation: blinker 1s linear infinite;
+}
+
+.logo-main {
+    cursor: pointer;
+}
+
+.title {
+    color: white;
+    text-align: center;
+}
+
+.main {
+    padding: 10px;
+}
+
+.epl-body {
+    backdrop-filter: blur(40px);
+    min-height: 100vh;
+    z-index: -1;
+}
+
+.bundes-bd {
+    background: #ED213A;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #93291E, #ED213A);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #93291E, #ED213A); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    min-height: 100vh;
+}
+
+.liga-bd {
+    background-color: rgb(12, 27, 35);
+    min-height: 100vh;
+}
+
+.seriea-body {
+    background-color: #104dac;
+    min-height: 100vh;
+}
+
+.leagues-scroll {
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    justify-content: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.tags-scroll {
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    margin: 10px 0;
+    padding: 0 10px;
+    width: 100%;
+}
+
+.scroll-item {
+    display: flex;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+    background-color: #f1f2f4;
+    cursor: pointer;
+}
+
+.league-img-scroll {
+    height: 40px;
+    width: 40px;
+}
+
+.season {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background-color: #F9FFFF;
+    color: black;
+    margin: 0 5px;
+    min-width: 80px;
+    cursor: pointer;
+}
+
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+
+@keyframes zoom {
+    0% {
+        transform: scale(1,1);
+    }
+    50% {
+        transform: scale(1.2,1.2);
+    }
+    100% {
+        transform: scale(1,1);
+    }
+}
+
+@keyframes run {
+    0% {
+      left: -50%;
+      transform: translateX(-30%);
+    }
+    100% {
+      left: 100%;
+      transform: translateX(100%);
+    }
+}
+
+@keyframes heartbeat
+{
+  0%
+  {
+    transform: scale( .75 );
+  }
+  20%
+  {
+    transform: scale( 1 );
+  }
+  40%
+  {
+    transform: scale( .75 );
+  }
+  60%
+  {
+    transform: scale( 1 );
+  }
+  80%
+  {
+    transform: scale( .75 );
+  }
+  100%
+  {
+    transform: scale( .75 );
+  }
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
