@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React, { Component } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,17 +9,16 @@ import TableRow from '@material-ui/core/TableRow';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
 import firebase from "../firebase/config";
 import swal from 'sweetalert';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import './admin.css';
 
-export default class ListMatches extends Component{
-    constructor(props){
+export default class ListMatches extends Component {
+    constructor(props) {
         super(props);
         this.state = {
             data: [],
@@ -28,59 +27,70 @@ export default class ListMatches extends Component{
             laliga: [],
             bundesliga: [],
             seriea: [],
+            ligue1: [],
             league: ''
         }
     }
 
     componentDidMount() {
         firebase.db.collection("teams").orderBy('name', 'asc').get()
-        .then(res => {
-            this.setState({
-                teams: res.docs,
+            .then(res => {
+                this.setState({
+                    teams: res.docs,
+                });
             });
-        });
 
         firebase.db.collection('premier').orderBy('date', 'desc').get()
-        .then(res => {
-            this.setState({
-                premier: res.docs,
-                data: res.docs,
-                league: 'premier'
+            .then(res => {
+                this.setState({
+                    premier: res.docs,
+                    data: res.docs,
+                    league: 'premier'
+                });
+            })
+            .catch(err => {
+                console.log(err);
             });
-        })
-        .catch(err => {
-            console.log(err);
-        });
 
         firebase.db.collection('laliga').orderBy('date', 'desc').get()
-        .then(res => {
-            this.setState({
-                laliga: res.docs
+            .then(res => {
+                this.setState({
+                    laliga: res.docs
+                });
+            })
+            .catch(err => {
+                console.log(err);
             });
-        })
-        .catch(err => {
-            console.log(err);
-        });
 
         firebase.db.collection('bundesliga').orderBy('date', 'desc').get()
-        .then(res => {
-            this.setState({
-                bundesliga: res.docs
+            .then(res => {
+                this.setState({
+                    bundesliga: res.docs
+                });
+            })
+            .catch(err => {
+                console.log(err);
             });
-        })
-        .catch(err => {
-            console.log(err);
-        });
 
         firebase.db.collection('seriea').orderBy('date', 'desc').get()
-        .then(res => {
-            this.setState({
-                seriea: res.docs
+            .then(res => {
+                this.setState({
+                    seriea: res.docs
+                });
+            })
+            .catch(err => {
+                console.log(err);
             });
-        })
-        .catch(err => {
-            console.log(err);
-        });
+
+        firebase.db.collection('ligue1').orderBy('date', 'desc').get()
+            .then(res => {
+                this.setState({
+                    ligue1: res.docs
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 
     filter = (league) => {
@@ -101,29 +111,29 @@ export default class ListMatches extends Component{
             icon: "warning",
             buttons: true,
             dangerMode: true,
-          })
-          .then((willDelete) => {
-            if (willDelete) {
-              firebase.db.collection(this.state.league).doc(id).delete()
-              .then(res => {
-                swal("Match deleted correctly", {
-                  icon: "success",
-                });
-                this.state[this.state.league] = this.state[this.state.league].filter(match => match.ref.id !== id);
-              })
-              .catch(err => {
-                swal("Error", {
-                  icon: "error",
-                });
-              })
-            } else {
-              swal("You don't deleted this tournament");
-            }
-        });
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    firebase.db.collection(this.state.league).doc(id).delete()
+                        .then(res => {
+                            swal("Match deleted correctly", {
+                                icon: "success",
+                            });
+                            this.state[this.state.league] = this.state[this.state.league].filter(match => match.ref.id !== id);
+                        })
+                        .catch(err => {
+                            swal("Error", {
+                                icon: "error",
+                            });
+                        })
+                } else {
+                    swal("You don't deleted this tournament");
+                }
+            });
     }
 
     render() {
-        return(
+        return (
             <div className="main">
                 <Grid container direction="row" justify="center" alignItems="center">
                     <Grid item xs={12} lg={8}>
@@ -143,9 +153,10 @@ export default class ListMatches extends Component{
                                 <span className="tag" onClick={() => this.filter('laliga')}>La Liga</span>
                                 <span className="tag" onClick={() => this.filter('bundesliga')}>Bundesliga</span>
                                 <span className="tag" onClick={() => this.filter('seriea')}>Serie A</span>
+                                <span className="tag" onClick={() => this.filter('ligue1')}>Ligue 1</span>
                             </div>
                             {this.state.data.length > 0 && <TableContainer>
-                                <Table style={{width: "100%"}} aria-label="simple table">
+                                <Table style={{ width: "100%" }} aria-label="simple table">
                                     <TableHead>
                                         <TableRow>
                                             <TableCell align="left">Date</TableCell>
@@ -156,7 +167,7 @@ export default class ListMatches extends Component{
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {this.state.data.map((match,index) => (
+                                        {this.state.data.map((match, index) => (
                                             <TableRow key={index}>
                                                 <TableCell align="left">{match.data().date}</TableCell>
                                                 <TableCell align="left">{this.getName(match.data().home)}</TableCell>
@@ -169,7 +180,7 @@ export default class ListMatches extends Component{
                                                         </IconButton>
                                                     </Link>
                                                     <IconButton aria-label="delete" size="small" onClick={() => this.delete(match.ref.id)}>
-                                                        <DeleteIcon fontSize="inherit" color="secondary"/>
+                                                        <DeleteIcon fontSize="inherit" color="secondary" />
                                                     </IconButton>
                                                 </TableCell>
                                             </TableRow>

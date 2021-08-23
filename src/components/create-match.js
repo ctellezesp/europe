@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -31,15 +31,15 @@ export default class CreateMatch extends Component {
 
     componentDidMount() {
         firebase.db.collection('teams').orderBy('name', 'asc').get()
-        .then(res => {
-            console.log(res.docs);
-            this.setState({
-                data: res.docs
-            });
-        })
-        .catch(err => {
-            console.log(err);
-        })
+            .then(res => {
+                console.log(res.docs);
+                this.setState({
+                    data: res.docs
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
     setTitle = (event) => {
@@ -104,22 +104,22 @@ export default class CreateMatch extends Component {
             'frame': this.state.frame
         }
         firebase.db.collection(this.state.league).add(toSave)
-        .then(res => {
-            console.log(res);
-            swal('Match Added', 'Match added correctly', 'success')
-            .then(() => {
-                this.props.history.push("/list-matches");
-            })
+            .then(res => {
+                console.log(res);
+                swal('Match Added', 'Match added correctly', 'success')
+                    .then(() => {
+                        this.props.history.push("/list-matches");
+                    })
 
-        })
-        .catch(err => {
-            console.log(err);
-            swal("Error", "Verify your data", "error");
-        })
+            })
+            .catch(err => {
+                console.log(err);
+                swal("Error", "Verify your data", "error");
+            })
     }
 
     render() {
-        return(
+        return (
             <div className="main">
                 <Grid container direction="row" justify="center" alignItems="center">
                     <Grid item xs={12} md={8}>
@@ -139,15 +139,16 @@ export default class CreateMatch extends Component {
                                     <FormControl fullWidth variant="outlined">
                                         <InputLabel id="demo-simple-select-outlined-label">League</InputLabel>
                                         <Select
-                                        labelId="demo-simple-select-outlined-label"
-                                        id="demo-simple-select-outlined"
-                                        onChange={this.setLeague}
-                                        label="League"
+                                            labelId="demo-simple-select-outlined-label"
+                                            id="demo-simple-select-outlined"
+                                            onChange={this.setLeague}
+                                            label="League"
                                         >
                                             <MenuItem value="premier">Premier League</MenuItem>
                                             <MenuItem value="laliga">La Liga</MenuItem>
                                             <MenuItem value="bundesliga">Bundesliga</MenuItem>
                                             <MenuItem value="seriea">Serie A</MenuItem>
+                                            <MenuItem value="ligue1">Ligue 1</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
@@ -155,13 +156,13 @@ export default class CreateMatch extends Component {
                                     <FormControl fullWidth variant="outlined">
                                         <InputLabel id="demo-simple-select-outlined-label">Home</InputLabel>
                                         <Select
-                                        labelId="demo-simple-select-outlined-label"
-                                        id="demo-simple-select-outlined"
-                                        onChange={this.setHome}
-                                        label="Home"
+                                            labelId="demo-simple-select-outlined-label"
+                                            id="demo-simple-select-outlined"
+                                            onChange={this.setHome}
+                                            label="Home"
                                         >
                                             {this.state.teams.map((team, index) => {
-                                                return(<MenuItem key={index} value={team.ref.id}>{team.data().name}</MenuItem>)
+                                                return (<MenuItem key={index} value={team.ref.id}>{team.data().name}</MenuItem>)
                                             })}
                                         </Select>
                                     </FormControl>
@@ -170,13 +171,13 @@ export default class CreateMatch extends Component {
                                     <FormControl fullWidth variant="outlined">
                                         <InputLabel id="demo-simple-select-outlined-label">Away</InputLabel>
                                         <Select
-                                        labelId="demo-simple-select-outlined-label"
-                                        id="demo-simple-select-outlined"
-                                        onChange={this.setAway}
-                                        label="Away"
+                                            labelId="demo-simple-select-outlined-label"
+                                            id="demo-simple-select-outlined"
+                                            onChange={this.setAway}
+                                            label="Away"
                                         >
                                             {this.state.teams.map((team, index) => {
-                                                return(<MenuItem key={index} value={team.ref.id}>{team.data().name}</MenuItem>)
+                                                return (<MenuItem key={index} value={team.ref.id}>{team.data().name}</MenuItem>)
                                             })}
                                         </Select>
                                     </FormControl>

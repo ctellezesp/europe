@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
 
 import Main from './components/main';
@@ -20,22 +19,24 @@ import Watch from './components/watch';
 import EditMatch from './components/edit-match';
 import Navbar from './components/navbar';
 
-function App() {
+const App = () => {
   return (
     <Router>
       <Navbar />
-      <Route path='/' exact component={Main} />
-      <Route path='/premier' component={Premier} />
-      <Route path='/bundesliga' component={Bundesliga} />
-      <Route path='/laliga' component={LaLiga} />
-      <Route path='/seriea' component={SerieA} />
-      <Route path='/add-team' component={AddTeams} />
-      <Route path='/edit-team/:id' component={EditTeams} />
-      <Route path='/list-teams' component={ListTeams} />
-      <Route path='/create-match' component={CreateMatch} />
-      <Route path='/list-matches' component={ListMatches} />
-      <Route path='/edit-match/:league/:id' component={EditMatch} />
-      <Route path='/watch/:league/:id' component={Watch} />
+      <Switch>
+        <Route path='/' exact component={Main} />
+        <Route path='/premier' component={Premier} />
+        <Route path='/bundesliga' component={Bundesliga} />
+        <Route path='/laliga' component={LaLiga} />
+        <Route path='/seriea' component={SerieA} />
+        <Route path='/add-team' component={AddTeams} />
+        <Route path='/edit-team/:id' component={EditTeams} />
+        <Route path='/list-teams' component={ListTeams} />
+        <Route path='/create-match' component={CreateMatch} />
+        <Route path='/list-matches' component={ListMatches} />
+        <Route path='/edit-match/:league/:id' component={EditMatch} />
+        <Route path='/watch/:league/:id' component={Watch} />
+      </Switch>
     </Router>
   );
 }

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -32,31 +32,31 @@ export default class EditMatch extends Component {
 
     componentDidMount() {
         firebase.db.collection('teams').orderBy('name', 'asc').get()
-        .then(res => {
-            const teamsLeague = res.docs.filter(team => team.data().league === this.state.league);
-            this.setState({
-                data: res.docs,
-                teams: teamsLeague
+            .then(res => {
+                const teamsLeague = res.docs.filter(team => team.data().league === this.state.league);
+                this.setState({
+                    data: res.docs,
+                    teams: teamsLeague
+                });
+            })
+            .catch(err => {
+                console.log(err);
             });
-        })
-        .catch(err => {
-            console.log(err);
-        });
         console.log(this.state.league, this.state.id);
         firebase.db.collection(this.state.league).doc(this.state.id).get()
-        .then(res => {
-            console.log(res.data());
-            this.setState({
-                title: res.data().title,
-                season: res.data().season,
-                home: res.data().home,
-                away: res.data().away,
-                date: res.data().date,
-                stadium: res.data().stadium,
-                frame: res.data().frame,
-            });
+            .then(res => {
+                console.log(res.data());
+                this.setState({
+                    title: res.data().title,
+                    season: res.data().season,
+                    home: res.data().home,
+                    away: res.data().away,
+                    date: res.data().date,
+                    stadium: res.data().stadium,
+                    frame: res.data().frame,
+                });
 
-        })
+            })
     }
 
     setTitle = (event) => {
@@ -120,23 +120,23 @@ export default class EditMatch extends Component {
             'stadium': this.state.stadium,
             'frame': this.state.frame
         }
-        firebase.db.collection(this.state.league).doc(this.state.id).set(toSave, {merge: true})
-        .then(res => {
-            console.log(res);
-            swal('Match Edited', 'Match edited correctly', 'success')
-            .then(() => {
-                this.props.history.push("/list-matches");
-            })
+        firebase.db.collection(this.state.league).doc(this.state.id).set(toSave, { merge: true })
+            .then(res => {
+                console.log(res);
+                swal('Match Edited', 'Match edited correctly', 'success')
+                    .then(() => {
+                        this.props.history.push("/list-matches");
+                    })
 
-        })
-        .catch(err => {
-            console.log(err);
-            swal("Error", "Verify your data", "error");
-        })
+            })
+            .catch(err => {
+                console.log(err);
+                swal("Error", "Verify your data", "error");
+            })
     }
 
     render() {
-        return(
+        return (
             <div className="main">
                 <Grid container direction="row" justify="center" alignItems="center">
                     <Grid item xs={12} md={8}>
@@ -156,16 +156,17 @@ export default class EditMatch extends Component {
                                     <FormControl fullWidth variant="outlined">
                                         <InputLabel id="demo-simple-select-outlined-label">League</InputLabel>
                                         <Select
-                                        labelId="demo-simple-select-outlined-label"
-                                        id="demo-simple-select-outlined"
-                                        value={this.state.league}
-                                        onChange={this.setLeague}
-                                        label="League"
+                                            labelId="demo-simple-select-outlined-label"
+                                            id="demo-simple-select-outlined"
+                                            value={this.state.league}
+                                            onChange={this.setLeague}
+                                            label="League"
                                         >
                                             <MenuItem value="premier">Premier League</MenuItem>
                                             <MenuItem value="laliga">La Liga</MenuItem>
                                             <MenuItem value="bundesliga">Bundesliga</MenuItem>
                                             <MenuItem value="seriea">Serie A</MenuItem>
+                                            <MenuItem value="ligue1">Ligue 1</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
@@ -173,14 +174,14 @@ export default class EditMatch extends Component {
                                     <FormControl fullWidth variant="outlined">
                                         <InputLabel id="demo-simple-select-outlined-label">Home</InputLabel>
                                         <Select
-                                        labelId="demo-simple-select-outlined-label"
-                                        id="demo-simple-select-outlined"
-                                        value={this.state.home}
-                                        onChange={this.setHome}
-                                        label="Home"
+                                            labelId="demo-simple-select-outlined-label"
+                                            id="demo-simple-select-outlined"
+                                            value={this.state.home}
+                                            onChange={this.setHome}
+                                            label="Home"
                                         >
                                             {this.state.teams.map((team, index) => {
-                                                return(<MenuItem key={index} value={team.ref.id}>{team.data().name}</MenuItem>)
+                                                return (<MenuItem key={index} value={team.ref.id}>{team.data().name}</MenuItem>)
                                             })}
                                         </Select>
                                     </FormControl>
@@ -189,14 +190,14 @@ export default class EditMatch extends Component {
                                     <FormControl fullWidth variant="outlined">
                                         <InputLabel id="demo-simple-select-outlined-label">Away</InputLabel>
                                         <Select
-                                        labelId="demo-simple-select-outlined-label"
-                                        id="demo-simple-select-outlined"
-                                        value={this.state.away}
-                                        onChange={this.setAway}
-                                        label="Away"
+                                            labelId="demo-simple-select-outlined-label"
+                                            id="demo-simple-select-outlined"
+                                            value={this.state.away}
+                                            onChange={this.setAway}
+                                            label="Away"
                                         >
                                             {this.state.teams.map((team, index) => {
-                                                return(<MenuItem key={index} value={team.ref.id}>{team.data().name}</MenuItem>)
+                                                return (<MenuItem key={index} value={team.ref.id}>{team.data().name}</MenuItem>)
                                             })}
                                         </Select>
                                     </FormControl>

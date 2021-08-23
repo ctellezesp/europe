@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React, { Component } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -18,8 +18,8 @@ import swal from 'sweetalert';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import './admin.css';
 
-export default class ListTeams extends Component{
-    constructor(props){
+export default class ListTeams extends Component {
+    constructor(props) {
         super(props);
         this.state = {
             data: [],
@@ -30,13 +30,13 @@ export default class ListTeams extends Component{
 
     componentDidMount() {
         firebase.db.collection("teams").orderBy('name', 'asc').get()
-        .then(res => {
-            this.setState({
-                data: res.docs,
-                teams: res.docs,
-                loading: false
-            });
-        })
+            .then(res => {
+                this.setState({
+                    data: res.docs,
+                    teams: res.docs,
+                    loading: false
+                });
+            })
     }
 
     filter = (league) => {
@@ -53,37 +53,37 @@ export default class ListTeams extends Component{
             icon: "warning",
             buttons: true,
             dangerMode: true,
-          })
-          .then((willDelete) => {
-            if (willDelete) {
-              firebase.db.collection("teams").doc(id).delete()
-              .then(res => {
-                swal("Tournament deleted correctly", {
-                  icon: "success",
-                });
-                firebase.db.collection("teams").orderBy('title', 'asc').get()
-                .then(res => {
-                    this.setState({
-                        data: res.docs
-                    })
-                })
-                .catch(err => {
-                    console.log(err)
-                });
-              })
-              .catch(err => {
-                swal("Error", {
-                  icon: "error",
-                });
-              })
-            } else {
-              swal("You don't deleted this tournament");
-            }
-        });
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    firebase.db.collection("teams").doc(id).delete()
+                        .then(res => {
+                            swal("Tournament deleted correctly", {
+                                icon: "success",
+                            });
+                            firebase.db.collection("teams").orderBy('title', 'asc').get()
+                                .then(res => {
+                                    this.setState({
+                                        data: res.docs
+                                    })
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                });
+                        })
+                        .catch(err => {
+                            swal("Error", {
+                                icon: "error",
+                            });
+                        })
+                } else {
+                    swal("You don't deleted this tournament");
+                }
+            });
     }
 
     render() {
-        return(
+        return (
             <div className="main">
                 <Grid container direction="row" justify="center" alignItems="center">
                     <Grid item xs={12} lg={8}>
@@ -103,9 +103,10 @@ export default class ListTeams extends Component{
                                 <span className="tag" onClick={() => this.filter('laliga')}>La Liga</span>
                                 <span className="tag" onClick={() => this.filter('bundesliga')}>Bundesliga</span>
                                 <span className="tag" onClick={() => this.filter('seriea')}>Serie A</span>
+                                <span className="tag" onClick={() => this.filter('ligue1')}>Ligue 1</span>
                             </div>
                             {this.state.teams.length > 0 && <TableContainer>
-                                <Table style={{width: "100%"}} aria-label="simple table">
+                                <Table style={{ width: "100%" }} aria-label="simple table">
                                     <TableHead>
                                         <TableRow>
                                             <TableCell align="left"></TableCell>
@@ -114,7 +115,7 @@ export default class ListTeams extends Component{
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {this.state.teams.map((team,index) => (
+                                        {this.state.teams.map((team, index) => (
                                             <TableRow key={index}>
                                                 <TableCell align="right"><Avatar alt={team.data().name} src={team.data().img} /></TableCell>
                                                 <TableCell align="left">{team.data().name}</TableCell>
@@ -125,7 +126,7 @@ export default class ListTeams extends Component{
                                                         </IconButton>
                                                     </Link>
                                                     <IconButton aria-label="delete" size="small" onClick={() => this.delete(team.ref.id)}>
-                                                        <DeleteIcon fontSize="inherit" color="secondary"/>
+                                                        <DeleteIcon fontSize="inherit" color="secondary" />
                                                     </IconButton>
                                                 </TableCell>
                                             </TableRow>
