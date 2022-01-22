@@ -1,19 +1,19 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
 
 @font-face {
 	font-family: DFLWeb;
-	src: url("https://www.bundesliga.com/assets/fonts/DFLWeb-Bd.eot");
+	src: url('https://www.bundesliga.com/assets/fonts/DFLWeb-Bd.eot');
 }
 
 @font-face {
 	font-family: PremierSans;
-	src: url("https://www.premierleague.com/resources/prod/b206e35-3315/fonts/PremierLeagueW01-Regular.woff2");
+	src: url('https://www.premierleague.com/resources/prod/b206e35-3315/fonts/PremierLeagueW01-Regular.woff2');
 }
 
 body {
 	background-color: black;
 	height: 100%;
-	font-family: "Lato", sans-serif;
+	font-family: 'Lato', sans-serif;
 }
 
 .main-body {
@@ -192,6 +192,7 @@ body {
 	border: 2px solid #1b2a2e;
 	padding: 10px 0;
 	border-radius: 5px;
+	position: relative;
 }
 
 .laliga-logo-div {
@@ -306,7 +307,7 @@ body {
 }
 
 .info-home::after {
-	content: "";
+	content: '';
 	width: 10%;
 	background: linear-gradient(90deg, #00197d, #01fd8d);
 }
@@ -357,12 +358,6 @@ body {
 	background-color: #37003c;
 	color: white;
 	padding: 10px 0;
-}
-
-.premier-header > img {
-	height: 20px;
-	width: 20px;
-	margin: 0 5px;
 }
 
 .pl-body {
@@ -512,7 +507,7 @@ body {
 }
 
 .seriea-mn:hover {
-	background-image: url("http://www.legaseriea.it/assets/legaseriea/images/sfondo_news.jpg?v=2");
+	background-image: url('http://www.legaseriea.it/assets/legaseriea/images/sfondo_news.jpg?v=2');
 }
 
 .seriea-mn:hover > img {
