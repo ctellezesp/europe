@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import '../cards.css';
 
 export const Ligue1Component = ({ id, title, home, away, inList = true }) => (
-  <Grid item xs={12} md={inList ? 6 : 12} lg={inList ? 3 : 12}>
+  <Grid item xs={12}>
     <Link to={`/watch/ligue1/${id}`}>
       <Paper elevation={3} className="ligue1">
         <div className="ligue1-header">

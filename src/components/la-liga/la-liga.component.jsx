@@ -7,7 +7,7 @@ import '../cards.css';
 
 export const LaLigaComponent = ({ id, season, home, away, stadium, title, inList = true }) => {
   return (
-    <Grid item xs={12} md={inList ? 6 : 12} lg={inList ? 3 : 12}>
+    <Grid item xs={12}>
         <Link to={`/watch/laliga/${id}`}>
             <Paper elevation={3} className="laliga">
                 <div className="laliga-brand">

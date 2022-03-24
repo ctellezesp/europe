@@ -8,7 +8,7 @@ import '../cards.css';
 
 export const PremierComponent = ({ id, stadium, home, away, title, inList = true }) => {
   return (
-    <Grid item xs={12} md={inList ? 6 : 12} lg={inList ? 3 : 12}>
+    <Grid item xs={12}>
       <Link to={`/watch/premier/${id}`}>
         <Paper elevation={3} className="premier">
           <div className="premier-header">

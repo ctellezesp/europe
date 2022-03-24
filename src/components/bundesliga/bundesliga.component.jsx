@@ -7,7 +7,7 @@ import '../cards.css';
 
 export const BundesligaComponent = ({ id, season, title, home, away, stadium, inList = true }) => {
   return (
-    <Grid item xs={12} md={inList ? 6 : 12} lg={inList ? 3 : 12}>
+    <Grid item xs={12}>
       <Link to={`/watch/bundesliga/${id}`}>
         <Paper className="bundesliga" elevation={3}>
           <div className="bundesliga-header">

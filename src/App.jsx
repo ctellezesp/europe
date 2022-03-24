@@ -21,13 +21,13 @@ const App = () => {
       <Navbar />
       <Switch>
         <Route path='/' exact component={MainComponent} />
+        <Route path='/watch/:league/:id' component={WatchComponent} />
         <Route path='/add-team' component={AddTeams} />
         <Route path='/edit-team/:id' component={EditTeams} />
         <Route path='/list-teams' component={ListTeams} />
         <Route path='/create-match' component={CreateMatch} />
         <Route path='/list-matches' component={ListMatches} />
         <Route path='/edit-match/:league/:id' component={EditMatch} />
-        <Route path='/watch/:league/:id' component={WatchComponent} />
       </Switch>
     </Router>
   );

@@ -6,7 +6,7 @@ import '../cards.css';
 
 export const SerieAComponent = ({ id, title, home, away, stadium, inList = true }) => {
   return (
-    <Grid item xs={12} md={inList ? 6 : 12} lg={inList ? 3 : 12}>
+    <Grid item xs={12}>
       <Link to={`/watch/seriea/${id}`}>
         <Paper elevation={3} className="seriea">
           <div className="seriea-header">
