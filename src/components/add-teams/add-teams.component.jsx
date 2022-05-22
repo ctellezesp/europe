@@ -16,6 +16,9 @@ import { useHistory } from 'react-router-dom';
 
 import firebase from '../../firebase/config';
 import swal from 'sweetalert';
+
+import LEAGUE_OPTIONS from '../../constants/league-options.constant';
+
 import '../admin.css';
 
 export const AddTeamsComponent = () => {
@@ -77,11 +80,9 @@ export const AddTeamsComponent = () => {
                       label="League"
                       name="league"
                   >
-                      <MenuItem value="premier">Premier League</MenuItem>
-                      <MenuItem value="laliga">La Liga</MenuItem>
-                      <MenuItem value="bundesliga">Bundesliga</MenuItem>
-                      <MenuItem value="seriea">Serie A</MenuItem>
-                      <MenuItem value="ligue1">Ligue 1</MenuItem>
+                    {LEAGUE_OPTIONS.map(item => (
+                      <MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>
+                    ))}
                   </Select>
               </FormControl>
               <Button

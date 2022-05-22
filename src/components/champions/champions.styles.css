@@ -1,0 +1,60 @@
+.champions {
+  background: url(https://uclbranding.uefa.com/assets/img/carousel-1.jpg)!important;
+  background-position: bottom !important;
+  display: flex;
+  flex-direction: column;
+  color: #FFFFFF;
+}
+
+.champions-header {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+  margin-bottom: 30px;
+} 
+
+.champions-logo {
+  height: 50px;
+  width: auto;
+  margin-bottom: -50px;
+}
+
+.champions-body {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.champions-team {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.champions-team-logo {
+  width: 70%;
+  height: auto;
+}
+
+.champions-team-name {
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.champions-footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.champions-footer-title, .champions-footer-stadium {
+  text-align: center;
+  text-transform: uppercase;
+  margin: 3px 0;
+}

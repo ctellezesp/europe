@@ -11,6 +11,7 @@ import { BundesligaComponent } from '../bundesliga/bundesliga.component';
 import { SerieAComponent } from '../serie-a/serie-a.component';
 import { Ligue1Component } from '../ligue-1/ligue-1.component';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { ChampionsComponent } from '../champions/champions.component';
 
 export const WatchComponent = () => {
   const { league, id } = useParams();
@@ -108,6 +109,16 @@ export const WatchComponent = () => {
                 home={state.home}
                 away={state.away}
                 inList={false}
+              />
+            )}
+            {league === 'champions' && (
+              <ChampionsComponent 
+                id={id}
+                title={state.title}
+                home={state.home}
+                away={state.away}
+                inList={false}
+                stadium={state.stadium}
               />
             )}
           </Grid>
