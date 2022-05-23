@@ -759,3 +759,9 @@ body {
 		opacity: 0;
 	}
 }
+
+@media screen and (max-width: 500px) {
+	.leagues-scroll {
+		display: -webkit-inline-box;
+	}
+}

@@ -9,10 +9,10 @@ import { MainComponent } from './components/main/main.component';
 import { WatchComponent } from './components/watch/watch.component';
 import { AddTeamsComponent } from './components/add-teams/add-teams.component';
 import { ListTeamsComponent } from './components/list-teams/list-teams.component';
-import EditTeams from './components/edit-teams';
+import { EditTeamsComponent } from './components/edit-team/edit-team.component';
 import { CreateMatchComponent } from './components/create-match/create-match.component';
 import { ListMatchesComponent } from './components/list-matches/list-matches.component';
-import EditMatch from './components/edit-match';
+import { EditMatchComponent } from './components/edit-match/edit-match.component';
 import Navbar from './components/navbar';
 
 const App = () => {
@@ -23,11 +23,11 @@ const App = () => {
         <Route path='/' exact component={MainComponent} />
         <Route path='/watch/:league/:id' component={WatchComponent} />
         <Route path='/add-team' component={AddTeamsComponent} />
-        <Route path='/edit-team/:id' component={EditTeams} />
+        <Route path='/edit-team/:id' component={EditTeamsComponent} />
         <Route path='/list-teams' component={ListTeamsComponent} />
         <Route path='/create-match' component={CreateMatchComponent} />
         <Route path='/list-matches' component={ListMatchesComponent} />
-        <Route path='/edit-match/:league/:id' component={EditMatch} />
+        <Route path='/edit-match/:league/:id' component={EditMatchComponent} />
       </Switch>
     </Router>
   );

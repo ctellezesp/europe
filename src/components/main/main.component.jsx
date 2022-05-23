@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import firebase from '../../firebase/config';
 import { PremierComponent } from '../premier/premier.component';
@@ -10,8 +10,12 @@ import { SpinnerComponent } from '../spinner/spinner.component';
 import '../cards.css';
 import { ChampionsComponent } from '../champions/champions.component';
 import LEAGUE_OPTIONS from '../../constants/league-options.constant';
+import { AppContext } from '../../context/app.context';
 
 export const MainComponent = () => {
+
+  const appContext = useContext(AppContext);
+
   const [state, setState] = useState({
     premier: [],
     laliga: [],
@@ -35,14 +39,9 @@ export const MainComponent = () => {
 }
 
   const fetchLeague = async (league) => {
-    setState({
-      ...state,
-      loading: true
-    });
-    try {
-      const response = await firebase.db.collection(league).orderBy('date', 'desc').get();
+    if(appContext[league].length > 0) {
       const seasons = new Set();
-      const matches = response.docs;
+      const matches = appContext[league];
       matches.forEach((item) => seasons.add(item.data().season));
       setState({
         ...state,
@@ -52,18 +51,45 @@ export const MainComponent = () => {
         seasons: [...seasons],
         loading: false
       });
-    } catch (err) {
-      console.log({ err });
+    } else {
+      setState({
+        ...state,
+        loading: true
+      });
+      try {
+        const response = await firebase.db.collection(league).orderBy('date', 'desc').get();
+        const seasons = new Set();
+        const matches = response.docs;
+        matches.forEach((item) => seasons.add(item.data().season));
+        setState({
+          ...state,
+          [league]: matches,
+          data: filterBySeason(matches, [...seasons].slice().sort().reverse()[0]),
+          league,
+          seasons: [...seasons],
+          loading: false
+        });
+      } catch (err) {
+        console.log({ err });
+      }
     }
   }
 
   const fetchTeams = async () => {
-    const response = await firebase.db.collection('teams').orderBy('name', 'asc').get();
-    setState({
-      ...state,
-      teams: response.docs,
-      loading: false
-    });
+    if(appContext.teams.length > 0) {
+      setState({
+        ...state,
+        teams: appContext.teams,
+        loading: false
+      });
+    } else {
+      const response = await firebase.db.collection('teams').orderBy('name', 'asc').get();
+      setState({
+        ...state,
+        teams: response.docs,
+        loading: false
+      });
+    }
   }
 
   const getTeam = (id) => {

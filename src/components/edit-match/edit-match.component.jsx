@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 import {
   Grid,
@@ -12,16 +12,21 @@ import {
 } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import firebase from '../../firebase/config';
-import { useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
+import { useParams, useHistory } from 'react-router-dom';
 
 import LEAGUE_OPTIONS from '../../constants/league-options.constant';
-
 import '../admin.css';
-import { SpinnerComponent } from '../spinner/spinner.component';
+import { SpinnerComponent } from "../spinner/spinner.component";
 
-export const CreateMatchComponent = () => {
+export const EditMatchComponent = () => {
+
+  const { id, league } = useParams();
+  const history = useHistory();
+
   const [state, setState] = useState({
+    id,
+    league,
     title: '',
     season: '',
     home: '',
@@ -29,64 +34,73 @@ export const CreateMatchComponent = () => {
     date: '',
     stadium: '',
     frame: '',
-    league: '',
     data: [],
     teams: [],
     loading: true
   });
 
-  const history = useHistory();
-
   useEffect(() => {
-    const fetchTeams = async () => {
-      const { docs } = await firebase.db.collection('teams').orderBy('name', 'asc').get();
+    const fetchMatch = async (leagueId, matchId) => {
+      const teamsResult = await firebase.db.collection('teams').orderBy('name', 'asc').get();
+      const teamsLeague = leagueId === 'champions' ? teamsResult.docs : teamsResult.docs.filter(team => team.data().league === leagueId);
+      const matchResult = await firebase.db.collection(leagueId).doc(matchId).get();
+      const { title, season, home, away, date, stadium, frame } = matchResult.data();
       setState({
-        data: docs,
+        ...state,
+        data: teamsResult.docs,
+        teams: teamsLeague,
+        title,
+        season,
+        home,
+        away,
+        date,
+        stadium,
+        frame,
         loading: false
       });
     }
-    fetchTeams();
-  }, []);
+    fetchMatch(state.league, state.id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.id, state.league]);
 
   const handleChange = event => {
-    const {name, value} = event.target;
+    const { name, value } = event.target;
     setState({
       ...state,
       [name]: value
-    })
+    });
   }
 
-  const setLeague = (event) => {
+  const setLeague = event => {
     const { value } = event.target;
-    const display = value === 'champions' ? state.data : state.data.filter(team => team.data().league === value);
-    setState({
+    const display = state.data.filter(team => team.data().league === value);
+    this.setState({
       ...state,
       league: value,
       teams: display
     });
   }
 
-  const save = async () => {
-    const {title, season, home, away, date, stadium, frame} = state;
+  const save = () => {
+    const { title, season, home, away, date, stadium, frame } = state;
     const toSave = {
       title,
       season,
       home,
       away,
+      date,
       stadium,
-      frame,
-      date
-    };
-    await firebase.db.collection(state.league).add(toSave)
+      frame
+    }
+    firebase.db.collection(state.league).doc(state.id).set(toSave, { merge: true })
     .then(res => {
-      console.log(res);
-      swal('Match Added', 'Match added correctly', 'success')
-        .then(() => {
-          history.push("/list-matches");
-        })
+      swal('Match Edited', 'Match edited correctly', 'success')
+      .then(() => {
+        history.push("/list-matches");
+      })
+
     })
     .catch(err => {
-      console.log(err);
       swal("Error", "Verify your data", "error");
     })
   }
@@ -98,7 +112,7 @@ export const CreateMatchComponent = () => {
       <Grid container direction="row" justify="center" alignItems="center">
         <Grid item xs={12} md={8}>
           <Paper className="center-paper">
-            <h3>Create Match</h3>
+            <h3>Edit Match</h3>
             <Grid container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item xs={12}>
                 <TextField 
@@ -107,6 +121,7 @@ export const CreateMatchComponent = () => {
                   name="title"
                   label="Title" 
                   variant="outlined" 
+                  defaultValue={state.title} 
                   onChange={handleChange} 
                 />
               </Grid>
@@ -115,19 +130,21 @@ export const CreateMatchComponent = () => {
                   fullWidth 
                   type="date" 
                   id="date" 
-                  name="date"
+                  name="name"
                   label="Date" 
                   variant="outlined" 
+                  defaultValue={state.date} 
                   onChange={handleChange} 
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField 
                   fullWidth 
-                  id="season" 
-                  name="season"
+                  id="season"
+                  name="season" 
                   label="Season" 
                   variant="outlined" 
+                  defaultValue={state.season} 
                   onChange={handleChange} 
                 />
               </Grid>
@@ -135,32 +152,33 @@ export const CreateMatchComponent = () => {
                 <FormControl fullWidth variant="outlined">
                     <InputLabel id="demo-simple-select-outlined-label">League</InputLabel>
                     <Select
-                        labelId="demo-simple-select-outlined-label"
-                        id="demo-simple-select-outlined"
-                        onChange={setLeague}
-                        label="League"
-                    >
-                      {LEAGUE_OPTIONS.map(item => (
-                        <MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>
-                      ))}
-                    </Select>
+                      labelId="demo-simple-select-outlined-label"
+                      id="demo-simple-select-outlined"
+                      value={state.league}
+                      onChange={setLeague}
+                      label="League"
+                  >
+                    {LEAGUE_OPTIONS.map(item => (
+                      <MenuItem key={item.value} value={item.value}>{item.name}</MenuItem>
+                    ))}
+                  </Select>
                 </FormControl>
               </Grid>
               <Grid item xs={12} md={6}>
                 <FormControl fullWidth variant="outlined">
-                    <InputLabel id="demo-simple-select-outlined-label">Home</InputLabel>
-                    <Select
+                  <InputLabel id="demo-simple-select-outlined-label">Home</InputLabel>
+                  <Select
                       labelId="demo-simple-select-outlined-label"
                       id="demo-simple-select-outlined"
+                      name="home"
+                      value={state.home}
                       onChange={handleChange}
                       label="Home"
-                      name="home"
-                      disabled={!state.league}
-                    >
-                        {state.teams && state.teams.length > 0 && state.teams.map((team, index) => 
-                          <MenuItem key={index} value={team.ref.id}>{team.data().name}</MenuItem>
-                        )}
-                    </Select>
+                  >
+                      {state.teams && state.teams.length > 0 && state.teams.map((team, index) => 
+                        <MenuItem key={index} value={team.ref.id}>{team.data().name}</MenuItem>
+                      )}
+                  </Select>
                 </FormControl>
               </Grid>
               <Grid item xs={12} md={6}>
@@ -169,10 +187,10 @@ export const CreateMatchComponent = () => {
                   <Select
                       labelId="demo-simple-select-outlined-label"
                       id="demo-simple-select-outlined"
-                      onChange={handleChange}
                       name="away"
+                      value={state.away}
+                      onChange={handleChange}
                       label="Away"
-                      disabled={!state.league}
                   >
                       {state.teams && state.teams.length > 0 && state.teams.map((team, index) => 
                         <MenuItem key={index} value={team.ref.id}>{team.data().name}</MenuItem>
@@ -186,17 +204,19 @@ export const CreateMatchComponent = () => {
                   id="stadium" 
                   name="stadium"
                   label="Stadium" 
-                  variant="outlined" 
+                  variant="outlined"
+                  defaultValue={state.stadium} 
                   onChange={handleChange} 
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField 
                   fullWidth 
-                  id="frame" 
+                  id="frame"
                   name="frame"
                   label="Frame" 
                   variant="outlined" 
+                  defaultValue={state.frame} 
                   onChange={handleChange} 
                 />
               </Grid>

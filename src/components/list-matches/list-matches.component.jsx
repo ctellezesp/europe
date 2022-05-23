@@ -21,6 +21,7 @@ import { Link } from "react-router-dom";
 
 import LEAGUE_OPTIONS from '../../constants/league-options.constant';
 import '../admin.css';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 export const ListMatchesComponent = () => {
   const [state, setState] = useState({
@@ -95,7 +96,7 @@ export const ListMatchesComponent = () => {
   }
 
   return state.loading ? (
-    <p>Cargando...</p>
+    <SpinnerComponent />
   ) : (
     <div className="main">
       <Grid container direction="row" justify="center" alignItems="center">

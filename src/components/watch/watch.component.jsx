@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { useParams } from 'react-router-dom';
-import { Grid} from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 
 import firebase from '../../firebase/config';
 import { PremierComponent } from '../premier/premier.component';
@@ -12,8 +12,10 @@ import { SerieAComponent } from '../serie-a/serie-a.component';
 import { Ligue1Component } from '../ligue-1/ligue-1.component';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { ChampionsComponent } from '../champions/champions.component';
+import { AppContext } from '../../context/app.context';
 
 export const WatchComponent = () => {
+  const appContext = useContext(AppContext);
   const { league, id } = useParams();
   const [state, setState] = useState({
     title: '',
@@ -28,23 +30,39 @@ export const WatchComponent = () => {
   });
 
   const fetchMatch = async (league, matchId) => {
-    try {
-      const result = await firebase.db.collection(league).doc(matchId).get();
-      const home = await firebase.db.collection('teams').doc(result.data().home).get();
-      const away = await firebase.db.collection('teams').doc(result.data().away).get();
+    if(appContext[league].length > 0) {
+      const match = appContext.getMatch(league, matchId);
+      const home = await firebase.db.collection('teams').doc(match.data().home).get();
+      const away = await firebase.db.collection('teams').doc(match.data().away).get();
       setState({
-        title: result.data().title,
-        date: result.data().date,
+        title: match.data().title,
+        date: match.data().date,
         home: home.data(),
         away: away.data(),
-        stadium: result.data().stadium,
-        season: result.data().season,
-        frame: result.data().frame,
+        stadium: match.data().stadium,
+        season: match.data().season,
+        frame: match.data().frame,
         loading: false
       })
-    } catch (err) {
-      console.log({ err });
-    }
+    } else {
+      try {
+        const result = await firebase.db.collection(league).doc(matchId).get();
+        const home = await firebase.db.collection('teams').doc(result.data().home).get();
+        const away = await firebase.db.collection('teams').doc(result.data().away).get();
+        setState({
+          title: result.data().title,
+          date: result.data().date,
+          home: home.data(),
+          away: away.data(),
+          stadium: result.data().stadium,
+          season: result.data().season,
+          frame: result.data().frame,
+          loading: false
+        })
+      } catch (err) {
+        console.log({ err });
+      }
+    } 
   }
 
   useEffect(() => {
