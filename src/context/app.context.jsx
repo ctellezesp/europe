@@ -1,4 +1,4 @@
-import { useState, useContext, createContext } from 'react';
+import { useState, createContext } from 'react';
 
 export const AppContext = createContext({
   teams: [],
@@ -8,10 +8,12 @@ export const AppContext = createContext({
   seriea: [],
   ligue1: [],
   champions: [],
+  storeTeams: (teams) => null,
   createTeam: (team) => null,
   updateTeam: (teamId, data) => null,
   getTeam: (teamId) => null,
   deleteTeam: (teamId) => null,
+  storeMatches: (league, matches) => null,
   createMatch: (league, match) => null,
   updateMatch: (league, match) => null,
   getMatch: (league, matchId) => null,
@@ -28,6 +30,13 @@ export const AppContextProvider = ({ children }) => {
     ligue1: [],
     champions: []
   });
+
+  const storeTeams = (teams) => {
+    setState(prev => ({
+      ...prev,
+      teams
+    }));
+  }
 
   const createTeam = (team) => {
     setState(prev => ({
@@ -51,6 +60,13 @@ export const AppContextProvider = ({ children }) => {
     setState(prev => ({
       ...prev,
       teams: prev.teams.filter(team => team.id !== teamId)
+    }))
+  }
+
+  const storeMatches = (league, matches) => {
+    setState(prev => ({
+      ...prev,
+      [league]: matches
     }))
   }
 
@@ -79,24 +95,29 @@ export const AppContextProvider = ({ children }) => {
     }))
   }
 
-  const { teams, bundesliga, premier, ligue1, laliga, seriea } = state;
+  const { teams, bundesliga, premier, ligue1, laliga, seriea, champions } = state;
 
-  <AppContext.Provider value={{
-    teams, 
-    bundesliga, 
-    premier, 
-    ligue1, 
-    laliga, 
-    seriea, 
-    createTeam, 
-    updateTeam, 
-    getTeam, 
-    deleteTeam, 
-    createMatch, 
-    updateMatch, 
-    getMatch, 
-    deleteMatch
-  }}>
-    {children}
-  </AppContext.Provider>
+  return (
+    <AppContext.Provider value={{
+      teams, 
+      bundesliga, 
+      premier, 
+      ligue1, 
+      laliga, 
+      seriea, 
+      champions,
+      storeTeams,
+      createTeam, 
+      updateTeam, 
+      getTeam, 
+      deleteTeam, 
+      storeMatches,
+      createMatch, 
+      updateMatch, 
+      getMatch, 
+      deleteMatch
+    }}>
+      {children}
+    </AppContext.Provider>
+  )
 }

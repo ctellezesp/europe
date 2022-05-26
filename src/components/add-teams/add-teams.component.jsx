@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import {
   Grid,
@@ -18,11 +18,13 @@ import firebase from '../../firebase/config';
 import swal from 'sweetalert';
 
 import LEAGUE_OPTIONS from '../../constants/league-options.constant';
+import { AppContext } from '../../context/app.context';
 
 import '../admin.css';
 
 export const AddTeamsComponent = () => {
   const history = useHistory();
+  const appContext = useContext(AppContext);
   const [state, setState] = useState({
     name: '',
     img: '',
@@ -39,7 +41,11 @@ export const AddTeamsComponent = () => {
 
   const save = async () => {
     try {
-      await firebase.db.collection("teams").add(state);
+      const { id } = await firebase.db.collection("teams").add(state);
+      appContext.createTeam({
+        ...state,
+        id
+      });
       swal("Team added", "The team has added correctly", "success")
         .then(
           () => history.push('/list-teams')

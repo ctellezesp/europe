@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useContext } from 'react';
 
 import { useParams } from 'react-router-dom';
@@ -32,8 +33,8 @@ export const WatchComponent = () => {
   const fetchMatch = async (league, matchId) => {
     if(appContext[league].length > 0) {
       const match = appContext.getMatch(league, matchId);
-      const home = await firebase.db.collection('teams').doc(match.data().home).get();
-      const away = await firebase.db.collection('teams').doc(match.data().away).get();
+      const home = appContext.teams.length > 0 ? appContext.getTeam(match.data().home) : await firebase.db.collection('teams').doc(match.data().home).get();
+      const away = appContext.teams.length > 0 ? appContext.getTeam(match.data().away) : await firebase.db.collection('teams').doc(match.data().away).get();
       setState({
         title: match.data().title,
         date: match.data().date,
@@ -67,7 +68,7 @@ export const WatchComponent = () => {
 
   useEffect(() => {
     fetchMatch(league, id);
-  }, []);
+  }, [league, id]);
 
   return state.loading ? (
     <SpinnerComponent />

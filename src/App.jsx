@@ -13,12 +13,13 @@ import { EditTeamsComponent } from './components/edit-team/edit-team.component';
 import { CreateMatchComponent } from './components/create-match/create-match.component';
 import { ListMatchesComponent } from './components/list-matches/list-matches.component';
 import { EditMatchComponent } from './components/edit-match/edit-match.component';
-import Navbar from './components/navbar';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 const App = () => {
   return (
     <Router>
-      <Navbar />
+      <NavbarComponent />
       <Switch>
         <Route path='/' exact component={MainComponent} />
         <Route path='/watch/:league/:id' component={WatchComponent} />
@@ -28,6 +29,7 @@ const App = () => {
         <Route path='/create-match' component={CreateMatchComponent} />
         <Route path='/list-matches' component={ListMatchesComponent} />
         <Route path='/edit-match/:league/:id' component={EditMatchComponent} />
+        <Route path='/dashboard' component={DashboardComponent} />
       </Switch>
     </Router>
   );

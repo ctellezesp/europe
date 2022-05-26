@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import {
   Grid,
@@ -18,9 +18,10 @@ import { useParams, useHistory } from 'react-router-dom';
 import LEAGUE_OPTIONS from '../../constants/league-options.constant';
 import '../admin.css';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { AppContext } from '../../context/app.context';
 
 export const EditTeamsComponent = () => {
-
+  const appContext = useContext(AppContext);
   const { id } = useParams();
   const history = useHistory();
 
@@ -34,7 +35,7 @@ export const EditTeamsComponent = () => {
 
   useEffect(() => {
     const fetchTeam = async teamId => {
-      const result = await firebase.db.collection("teams").doc(teamId).get();
+      const result = appContext.teams.length > 0 ? appContext.getTeam(teamId) : await firebase.db.collection("teams").doc(teamId).get();
       const { name, img, league } = result.data();
       setState({
         ...state,
@@ -59,6 +60,7 @@ export const EditTeamsComponent = () => {
   const save = () => {
     firebase.db.collection("teams").doc(state.id).set(state, { merge: true })
     .then(res => {
+      appContext.updateTeam(state.id, state);
       swal("Team added", "The team has added correctly", "success")
       .then(() => {
         history.push('/list-teams');

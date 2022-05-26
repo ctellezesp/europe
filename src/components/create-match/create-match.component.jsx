@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import {
   Grid,
@@ -19,8 +19,10 @@ import LEAGUE_OPTIONS from '../../constants/league-options.constant';
 
 import '../admin.css';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { AppContext } from '../../context/app.context';
 
 export const CreateMatchComponent = () => {
+  const appContext = useContext(AppContext);
   const [state, setState] = useState({
     title: '',
     season: '',
@@ -39,6 +41,13 @@ export const CreateMatchComponent = () => {
 
   useEffect(() => {
     const fetchTeams = async () => {
+      if(appContext.teams.length > 0) {
+        setState({
+          data: appContext.teams,
+          loading: false
+        });
+        return;
+      }
       const { docs } = await firebase.db.collection('teams').orderBy('name', 'asc').get();
       setState({
         data: docs,
@@ -77,17 +86,14 @@ export const CreateMatchComponent = () => {
       frame,
       date
     };
-    await firebase.db.collection(state.league).add(toSave)
-    .then(res => {
-      console.log(res);
-      swal('Match Added', 'Match added correctly', 'success')
-        .then(() => {
-          history.push("/list-matches");
-        })
-    })
-    .catch(err => {
-      console.log(err);
-      swal("Error", "Verify your data", "error");
+    const { id } = await firebase.db.collection(state.league).add(toSave);
+    appContext.createMatch(state.league, {
+      ...toSave,
+      id
+    });
+    swal('Match Added', 'Match added correctly', 'success')
+    .then(() => {
+      history.push("/list-matches");
     })
   }
 

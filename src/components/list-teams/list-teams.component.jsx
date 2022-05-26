@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import {
   Paper,
@@ -21,8 +21,10 @@ import swal from 'sweetalert';
 import { Link } from "react-router-dom";
 
 import '../admin.css';
+import { AppContext } from '../../context/app.context';
 
 export const ListTeamsComponent = () => {
+  const appContext = useContext(AppContext);
   const [state, setState] = React.useState({
     data: [],
     teams: [],
@@ -31,12 +33,21 @@ export const ListTeamsComponent = () => {
 
   React.useEffect(() => {
     const fetchTeams = async () => {
-      const {docs} = await firebase.db.collection("teams").orderBy('name', 'asc').get();
+      if(appContext.teams.length > 0) {
+        setState({
+          data: appContext.teams,
+          teams: appContext.teams,
+          loading: false
+        });
+        return;
+      }
+      const { docs } = await firebase.db.collection("teams").orderBy('name', 'asc').get();
       setState({
         data: docs,
         teams: docs,
         loading: false
       });
+      appContext.storeTeams(docs);
     }
     fetchTeams();
   }, []);
@@ -66,6 +77,7 @@ export const ListTeamsComponent = () => {
               ...state,
               data: updateTeams
             })
+            appContext.deleteTeam(id);
             swal("Tournament deleted correctly", {
                 icon: "success",
             });

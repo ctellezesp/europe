@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import {
   Paper,
@@ -22,8 +22,10 @@ import { Link } from "react-router-dom";
 import LEAGUE_OPTIONS from '../../constants/league-options.constant';
 import '../admin.css';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { AppContext } from '../../context/app.context';
 
 export const ListMatchesComponent = () => {
+  const appContext = useContext(AppContext);
   const [state, setState] = useState({
     data: [],
     teams: [],
@@ -38,16 +40,34 @@ export const ListMatchesComponent = () => {
   });
 
   const fetchLeagueMatches = async (league) => {
-    const {docs} = await firebase.db.collection(league).orderBy('date', 'desc').get()
+    if(appContext[league].length > 0) {
+      setState({
+        ...state,
+        [league]: appContext[league],
+        data: appContext[league],
+        league
+      });
+      return;
+    }
+    const { docs } = await firebase.db.collection(league).orderBy('date', 'desc').get()
     setState({
       ...state,
       [league]: docs,
       data: docs,
       league
     });
+    appContext.storeMatches(league, docs);
   }
 
   const fetchTeams = async () => {
+    if(appContext.teams.length > 0) {
+      setState({
+        ...state,
+        teams: appContext.teams,
+        loading: false
+      });
+      return;
+    }
     const { docs } = await firebase.db.collection("teams").orderBy('name', 'asc').get();
     setState({
       ...state,
@@ -83,6 +103,7 @@ export const ListMatchesComponent = () => {
                   icon: "success",
               });
               state[state.league] = state[state.league].filter(match => match.ref.id !== id);
+              appContext.deleteMatch(state.league, id);
           })
           .catch(err => {
             swal("Error", {

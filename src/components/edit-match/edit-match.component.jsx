@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import {
   Grid,
@@ -18,9 +18,11 @@ import { useParams, useHistory } from 'react-router-dom';
 import LEAGUE_OPTIONS from '../../constants/league-options.constant';
 import '../admin.css';
 import { SpinnerComponent } from "../spinner/spinner.component";
+import { AppContext } from "../../context/app.context";
 
 export const EditMatchComponent = () => {
 
+  const appContext = useContext(AppContext);
   const { id, league } = useParams();
   const history = useHistory();
 
@@ -41,9 +43,9 @@ export const EditMatchComponent = () => {
 
   useEffect(() => {
     const fetchMatch = async (leagueId, matchId) => {
-      const teamsResult = await firebase.db.collection('teams').orderBy('name', 'asc').get();
+      const teamsResult = appContext.teams.length > 0 ? appContext.teams : await firebase.db.collection('teams').orderBy('name', 'asc').get();
       const teamsLeague = leagueId === 'champions' ? teamsResult.docs : teamsResult.docs.filter(team => team.data().league === leagueId);
-      const matchResult = await firebase.db.collection(leagueId).doc(matchId).get();
+      const matchResult = appContext[leagueId].length > 0 ? appContext.getMatch(leagueId, matchId) : await firebase.db.collection(leagueId).doc(matchId).get();
       const { title, season, home, away, date, stadium, frame } = matchResult.data();
       setState({
         ...state,
@@ -94,6 +96,10 @@ export const EditMatchComponent = () => {
     }
     firebase.db.collection(state.league).doc(state.id).set(toSave, { merge: true })
     .then(res => {
+      appContext.updateMatch(state.league, {
+        ...toSave,
+        id: state.id
+      });
       swal('Match Edited', 'Match edited correctly', 'success')
       .then(() => {
         history.push("/list-matches");
