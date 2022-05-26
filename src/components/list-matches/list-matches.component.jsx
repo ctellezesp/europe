@@ -49,14 +49,18 @@ export const ListMatchesComponent = () => {
       });
       return;
     }
-    const { docs } = await firebase.db.collection(league).orderBy('date', 'desc').get()
+    const { docs } = await firebase.db.collection(league).orderBy('date', 'desc').get();
+    const matches = docs.map(doc => ({
+      ...doc.data(),
+      id: doc.ref.id
+    }))
     setState({
       ...state,
-      [league]: docs,
-      data: docs,
+      [league]: matches,
+      data: matches,
       league
     });
-    appContext.storeMatches(league, docs);
+    appContext.storeMatches(league, matches);
   }
 
   const fetchTeams = async () => {
@@ -69,9 +73,16 @@ export const ListMatchesComponent = () => {
       return;
     }
     const { docs } = await firebase.db.collection("teams").orderBy('name', 'asc').get();
+    const teams = docs.map(doc => {
+      const teamData = {
+        ...doc.data(),
+        id: doc.ref.id
+      }
+      return teamData;
+    });
     setState({
       ...state,
-      teams: docs,
+      teams,
       loading: false
     })
   }
@@ -85,7 +96,7 @@ export const ListMatchesComponent = () => {
     await fetchLeagueMatches(league);
   }
 
-  const getName = (id) => state.teams.find(team => team.id === id).data().name;
+  const getName = (id) => state.teams.find(team => team.id === id).name;
 
   const deleteMatch = async id => {
     swal({
@@ -102,7 +113,7 @@ export const ListMatchesComponent = () => {
               swal("Match deleted correctly", {
                   icon: "success",
               });
-              state[state.league] = state[state.league].filter(match => match.ref.id !== id);
+              state[state.league] = state[state.league].filter(match => match.id !== id);
               appContext.deleteMatch(state.league, id);
           })
           .catch(err => {
@@ -153,17 +164,17 @@ export const ListMatchesComponent = () => {
                   <TableBody>
                     {state.data.map((match, index) => (
                       <TableRow key={index}>
-                        <TableCell align="left">{match.data().date}</TableCell>
-                        <TableCell align="left">{getName(match.data().home)}</TableCell>
-                        <TableCell align="left">{getName(match.data().away)}</TableCell>
-                        <TableCell align="left">{match.data().title}</TableCell>
+                        <TableCell align="left">{match.date}</TableCell>
+                        <TableCell align="left">{getName(match.home)}</TableCell>
+                        <TableCell align="left">{getName(match.away)}</TableCell>
+                        <TableCell align="left">{match.title}</TableCell>
                         <TableCell align="left">
-                          <Link to={`edit-match/${state.league}/${match.ref.id}`}>
+                          <Link to={`edit-match/${state.league}/${match.id}`}>
                             <IconButton aria-label="edit" size="small">
                                 <EditIcon fontSize="inherit" color="primary" />
                             </IconButton>
                           </Link>
-                          <IconButton aria-label="delete" size="small" onClick={() => deleteMatch(match.ref.id)}>
+                          <IconButton aria-label="delete" size="small" onClick={() => deleteMatch(match.id)}>
                               <DeleteIcon fontSize="inherit" color="secondary" />
                           </IconButton>
                         </TableCell>

@@ -35,7 +35,18 @@ export const EditTeamsComponent = () => {
 
   useEffect(() => {
     const fetchTeam = async teamId => {
-      const result = appContext.teams.length > 0 ? appContext.getTeam(teamId) : await firebase.db.collection("teams").doc(teamId).get();
+      if(appContext.teams.length > 0) {
+        const { name, img, league } = appContext.getTeam(teamId);
+        setState({
+          ...state,
+          name,
+          img,
+          league,
+          loading: false
+        });
+        return;
+      }
+      const result = await firebase.db.collection("teams").doc(teamId).get();
       const { name, img, league } = result.data();
       setState({
         ...state,

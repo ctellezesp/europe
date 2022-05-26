@@ -42,18 +42,23 @@ export const ListTeamsComponent = () => {
         return;
       }
       const { docs } = await firebase.db.collection("teams").orderBy('name', 'asc').get();
+      const teams = docs.map(doc => ({
+        ...doc.data(),
+        id: doc.ref.id
+      }))
       setState({
-        data: docs,
-        teams: docs,
+        data: teams,
+        teams: teams,
         loading: false
       });
-      appContext.storeTeams(docs);
+      appContext.storeTeams(teams);
     }
     fetchTeams();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const filter = league => {
-    const teams = state.data.filter(team => team.data().league === league);
+    const teams = state.data.filter(team => team.league === league);
     setState({
       ...state,
       teams
@@ -128,15 +133,15 @@ export const ListTeamsComponent = () => {
                 <TableBody>
                   {state.teams.map((team, index) => (
                     <TableRow key={index}>
-                      <TableCell align="right"><Avatar alt={team.data().name} src={team.data().img} /></TableCell>
-                      <TableCell align="left">{team.data().name}</TableCell>
+                      <TableCell align="right"><Avatar alt={team.name} src={team.img} /></TableCell>
+                      <TableCell align="left">{team.name}</TableCell>
                       <TableCell align="left">
-                        <Link to={`edit-team/${team.ref.id}`}>
+                        <Link to={`edit-team/${team.id}`}>
                           <IconButton aria-label="edit" size="small">
                             <EditIcon fontSize="inherit" color="primary" />
                           </IconButton>
                         </Link>
-                        <IconButton aria-label="delete" size="small" onClick={() => deleteTeam(team.ref.id)}>
+                        <IconButton aria-label="delete" size="small" onClick={() => deleteTeam(team.id)}>
                             <DeleteIcon fontSize="inherit" color="secondary" />
                         </IconButton>
                       </TableCell>

@@ -42,14 +42,45 @@ export const EditMatchComponent = () => {
   });
 
   useEffect(() => {
+    const fetchTeams = async () => {
+      if(appContext.teams.length > 0) {
+        return appContext.teams;
+      }
+      const { docs } = await firebase.db.collection('teams').orderBy('name', 'asc').get();
+      const teams = docs.map(team => ({
+        ...team.data(),
+        id: team.ref.id
+      }));
+      appContext.storeTeams(teams);
+      return teams;
+    }
     const fetchMatch = async (leagueId, matchId) => {
-      const teamsResult = appContext.teams.length > 0 ? appContext.teams : await firebase.db.collection('teams').orderBy('name', 'asc').get();
-      const teamsLeague = leagueId === 'champions' ? teamsResult.docs : teamsResult.docs.filter(team => team.data().league === leagueId);
-      const matchResult = appContext[leagueId].length > 0 ? appContext.getMatch(leagueId, matchId) : await firebase.db.collection(leagueId).doc(matchId).get();
+      if(appContext[leagueId].length > 0) {
+        const teams = await fetchTeams();
+        const match = appContext.getMatch(leagueId, matchId);
+        const { title, season, home, away, date, stadium, frame } = match;
+        setState({
+          ...state,
+          data: teams,
+          teams: teams,
+          title,
+          season,
+          home,
+          away,
+          date,
+          stadium,
+          frame,
+          loading: false
+        });
+        return;
+      }
+      const teamsResult = await fetchTeams();
+      const teamsLeague = leagueId === 'champions' ? teamsResult : teamsResult.filter(team => team.league === leagueId);
+      const matchResult = await firebase.db.collection(leagueId).doc(matchId).get();
       const { title, season, home, away, date, stadium, frame } = matchResult.data();
       setState({
         ...state,
-        data: teamsResult.docs,
+        data: teamsResult,
         teams: teamsLeague,
         title,
         season,
@@ -182,7 +213,7 @@ export const EditMatchComponent = () => {
                       label="Home"
                   >
                       {state.teams && state.teams.length > 0 && state.teams.map((team, index) => 
-                        <MenuItem key={index} value={team.ref.id}>{team.data().name}</MenuItem>
+                        <MenuItem key={index} value={team.id}>{team.name}</MenuItem>
                       )}
                   </Select>
                 </FormControl>
@@ -199,7 +230,7 @@ export const EditMatchComponent = () => {
                       label="Away"
                   >
                       {state.teams && state.teams.length > 0 && state.teams.map((team, index) => 
-                        <MenuItem key={index} value={team.ref.id}>{team.data().name}</MenuItem>
+                        <MenuItem key={index} value={team.id}>{team.name}</MenuItem>
                       )}
                   </Select>
                 </FormControl>
