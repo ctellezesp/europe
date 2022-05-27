@@ -8,6 +8,7 @@ export const PlayerComponent = ({ render }) => {
   return (
     <div className="video-container">
       <iframe title='frame' src={frame} width="100%" height="auto" allowFullScreen></iframe>
+      <span className='loading-text'>Loading Video...</span>
     </div>
   );
 }

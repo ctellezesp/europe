@@ -1,5 +1,4 @@
 .video-container {
-    position: relative;
     padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
@@ -31,7 +30,6 @@ iframe, video, embed {
     background: -webkit-linear-gradient(to top, #004e92, #000428);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to top, #004e92, #000428); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     min-height: 100vh;
-    
 }
 
 @media only screen and (min-width: 720px) {

@@ -33,16 +33,16 @@ export const WatchComponent = () => {
   const fetchMatch = async (league, matchId) => {
     if(appContext[league].length > 0) {
       const match = appContext.getMatch(league, matchId);
-      const home = appContext.teams.length > 0 ? appContext.getTeam(match.data().home) : await firebase.db.collection('teams').doc(match.data().home).get();
-      const away = appContext.teams.length > 0 ? appContext.getTeam(match.data().away) : await firebase.db.collection('teams').doc(match.data().away).get();
+      const home = appContext.teams.length > 0 ? appContext.getTeam(match.home) : await firebase.db.collection('teams').doc(match.home).get();
+      const away = appContext.teams.length > 0 ? appContext.getTeam(match.away) : await firebase.db.collection('teams').doc(match.away).get();
       setState({
-        title: match.data().title,
-        date: match.data().date,
-        home: home.data(),
-        away: away.data(),
-        stadium: match.data().stadium,
-        season: match.data().season,
-        frame: match.data().frame,
+        title: match.title,
+        date: match.date,
+        home: home,
+        away: away,
+        stadium: match.stadium,
+        season: match.season,
+        frame: match.frame,
         loading: false
       })
     } else {

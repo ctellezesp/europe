@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, forwardRef } from 'react';
 
 import firebase from '../../firebase/config';
 import { PremierComponent } from '../premier/premier.component';
@@ -7,13 +7,35 @@ import { SerieAComponent } from '../serie-a/serie-a.component';
 import { BundesligaComponent } from '../bundesliga/bundesliga.component';
 import { Ligue1Component } from '../ligue-1/ligue-1.component';
 import { SpinnerComponent } from '../spinner/spinner.component';
-import '../cards.css';
 import { ChampionsComponent } from '../champions/champions.component';
 import LEAGUE_OPTIONS from '../../constants/league-options.constant';
 import { AppContext } from '../../context/app.context';
+import { 
+  TextField, 
+  Grid, 
+  Paper, 
+  Typography, 
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Slide,
+  IconButton
+} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { PlayerComponent } from '../player/player.component';
+import '../cards.css';
+import './main.styles.css';
+
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export const MainComponent = () => {
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const appContext = useContext(AppContext);
 
   const [state, setState] = useState({
@@ -22,11 +44,20 @@ export const MainComponent = () => {
     bundesliga: [],
     seriea: [],
     ligue1: [],
+    champions: [],
     data: [],
     league: '',
     seasons: [],
     teams: [],
-    loading: true
+    loading: true,
+    season: '',
+    searchValue: '',
+    leagueInfo: null,
+  });
+
+  const [matchModal, setMatchModal] = useState({
+    open: false,
+    match: null,
   });
 
   useEffect(() => {
@@ -35,21 +66,25 @@ export const MainComponent = () => {
   }, []);
 
   const filterBySeason = (matches, season) => {
-    return matches.filter((match) => match.data().season === season);
-}
+    return matches.filter(match => match.season === season);
+  }
 
   const fetchLeague = async (league) => {
-    if(appContext[league].length > 0) {
+    const leagueValue = league.value;
+    if(appContext[leagueValue].length > 0) {
       const seasons = new Set();
-      const matches = appContext[league];
-      matches.forEach((item) => seasons.add(item.data().season));
+      const matches = appContext[leagueValue];
+      matches.forEach((item) => seasons.add(item.season));
+      const defaultSeason = [...seasons].slice().sort().reverse()[0];
       setState({
         ...state,
         [league]: matches,
-        data: filterBySeason(matches, [...seasons].slice().sort().reverse()[0]),
-        league,
+        data: appContext.getMatchesBySeason(leagueValue, defaultSeason),
+        league: leagueValue,
         seasons: [...seasons],
-        loading: false
+        season: defaultSeason,
+        loading: false,
+        leagueInfo: league
       });
     } else {
       setState({
@@ -57,18 +92,25 @@ export const MainComponent = () => {
         loading: true
       });
       try {
-        const response = await firebase.db.collection(league).orderBy('date', 'desc').get();
+        const response = await firebase.db.collection(leagueValue).orderBy('date', 'desc').get();
         const seasons = new Set();
-        const matches = response.docs;
-        matches.forEach((item) => seasons.add(item.data().season));
+        const matches = response.docs.map(doc => ({
+          ...doc.data(),
+          id: doc.ref.id
+        }));
+        matches.forEach((item) => seasons.add(item.season));
+        const defaultSeason = [...seasons].slice().sort().reverse()[0];
         setState({
           ...state,
-          [league]: matches,
-          data: filterBySeason(matches, [...seasons].slice().sort().reverse()[0]),
-          league,
+          [leagueValue]: matches,
+          data: filterBySeason(matches, defaultSeason),
+          league: leagueValue,
           seasons: [...seasons],
-          loading: false
+          season: defaultSeason,
+          loading: false,
+          leagueInfo: league
         });
+        appContext.storeMatches(leagueValue, matches);
       } catch (err) {
         console.log({ err });
       }
@@ -84,23 +126,71 @@ export const MainComponent = () => {
       });
     } else {
       const response = await firebase.db.collection('teams').orderBy('name', 'asc').get();
+      const teams = response.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.ref.id
+      }))
       setState({
         ...state,
-        teams: response.docs,
+        teams,
         loading: false
       });
+      appContext.storeTeams(teams);
     }
   }
 
   const getTeam = (id) => {
-    return state.teams.find(team => team.ref.id === id).data();
+    return appContext.getTeam(id);
   }
 
   const getMatchesBySeason = (league, season) => {
     setState({
       ...state,
-      data: filterBySeason(state[league], season)
+      data: filterBySeason(state[league], season),
+      season,
+      searchValue: ''
     });
+  }
+
+  const handleSearch = event => {
+    const { value } = event.target;
+    const search = appContext.searchMatches(state.league, state.season, value);
+    setState({
+      ...state,
+      data: search,
+      searchValue: value
+    });
+  }
+
+  const handleOpenModal = (match) => {
+    console.log({
+      match
+    })
+    setMatchModal({
+      match,
+      open: true
+    })
+  }
+
+  const handleCloseModal = () => {
+    setMatchModal({
+      ...matchModal,
+      open: false
+    })
+  }
+
+  const generateTitle = match => {
+    return match ? (
+      <div style={{
+        display: 'flex',
+        alignItems: 'center'
+      }}>
+        <img height="30px" style={{ margin: '0 10px 0 0' }} src={state.leagueInfo.image} alt={state.leagueInfo.name} />
+        <Typography variant="body1">
+          {isMobile ? `${match.home.name} vs ${match.away.name}` : `${match.home.name} vs ${match.away.name} | ${match.title} | ${state.season}`}
+          </Typography>
+      </div>
+    ) : '';
   }
 
   return state.loading ? (
@@ -110,84 +200,183 @@ export const MainComponent = () => {
       <div>
         <div className="leagues-scroll">
           {LEAGUE_OPTIONS.map(league => (
-            <div className="scroll-item MuiPaper-elevation6">
-              <img className="league-img-scroll" alt={league.name} src={league.image} onClick={() => fetchLeague(league.value)} />
+            <div 
+              key={league.value} 
+              className={`scroll-item MuiPaper-elevation6 ${state.league === league.value ? 'active-league' : ''}`}
+            >
+              <img 
+                className="league-img-scroll" 
+                alt={league.name} 
+                src={league.image} 
+                onClick={() => fetchLeague(league)} 
+              />
             </div>
           ))}
         </div>
-        <div className="tags-scroll">
-          {state.seasons.map((season, index) => (
-            <span key={index} className="season MuiPaper-elevation6" onClick={() => getMatchesBySeason(state.league, season)}>{season}</span>
-          ))}
+      {state.data.length > 0 && (
+        <Grid container justifyContent="center" alignItems="center">
+          <Grid item xs={12}>
+            <Paper style={{ padding: '10px', margin: '20px 0' }}>
+              <TextField 
+                fullWidth
+                variant='outlined' 
+                name="search" 
+                type="string"
+                onChange={handleSearch}
+                label="Search"
+                defaultValue={state.searchValue}
+              />
+            </Paper>
+          </Grid>
+        </Grid>
+      )}
+      <div className="tags-scroll">
+        {state.seasons.map((season, index) => (
+          <span 
+            key={index} 
+            className={`season MuiPaper-elevation6 ${state.season === season ? 'active-season': ''}`}
+            onClick={() => getMatchesBySeason(state.league, season)}
+          >
+            {season}
+          </span>
+        ))}
+      </div>
+      {state.data.length === 0 && state.seasons.length === 0 && (
+        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+          <img src="https://logodix.com/logo/1999222.png" style={{ height: 'auto', width: '60%' }} alt="UEFA" />
         </div>
-        {state.data.length === 0 && (
-          <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <img src="https://logodix.com/logo/1999222.png" style={{ height: 'auto', width: '60%' }} alt="UEFA" />
-          </div>
+      )}
+        {state.data.length === 0 && state.league && (
+          <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+            spacing={2}
+          >
+            <Typography variant="body1" align="center" color="error">
+              No matches found
+            </Typography>
+            <Button 
+              variant="outlined" 
+              onClick={() => getMatchesBySeason(state.league, state.season)} 
+              color="secondary"
+            >
+              Show All Matches
+            </Button>
+          </Grid>
         )}
         <div className="grid-matches">
-          {state.league === 'premier' && state.data.map((match, index) => (
+          {state.league === 'premier' && state.data.length > 0 && state.data.map((match, index) => (
             <PremierComponent 
               key={index} 
-              id={match.ref.id} 
-              stadium={match.data().stadium}
-              home={getTeam(match.data().home)}
-              away={getTeam(match.data().away)}
-              title={match.data().title}
+              id={match.id} 
+              stadium={match.stadium}
+              home={getTeam(match.home)}
+              away={getTeam(match.away)}
+              title={match.title}
+              frame={match.frame}
+              handleClick={handleOpenModal}
             />
           ))}
-          {state.league === 'laliga' && state.data.map((match, index) => (
+          {state.league === 'laliga' && state.data.length > 0 && state.data.map((match, index) => (
             <LaLigaComponent 
               key={index}
-              id={match.ref.id}
-              stadium={match.data().stadium}
-              home={getTeam(match.data().home)}
-              away={getTeam(match.data().away)}
-              title={match.data().title}
+              id={match.id}
+              stadium={match.stadium}
+              home={getTeam(match.home)}
+              away={getTeam(match.away)}
+              title={match.title}
+              frame={match.frame}
+              handleClick={handleOpenModal}
             />
           ))}
-          {state.league === 'seriea' && state.data.map((match, index) => (
+          {state.league === 'seriea' && state.data.length > 0 && state.data.map((match, index) => (
             <SerieAComponent 
               key={index}
-              id={match.ref.id}
-              title={match.data().title}
-              home={getTeam(match.data().home)}
-              away={getTeam(match.data().away)}
-              stadium={match.data().stadium}
+              id={match.id}
+              title={match.title}
+              home={getTeam(match.home)}
+              away={getTeam(match.away)}
+              stadium={match.stadium}
+              frame={match.frame}
+              handleClick={handleOpenModal}
             />
           ))}
-          {state.league === 'bundesliga' && state.data.map((match, index) => (
+          {state.league === 'bundesliga' && state.data.length > 0 && state.data.map((match, index) => (
             <BundesligaComponent 
               key={index}
-              id={match.ref.id}
-              season={match.data().season}
-              title={match.data().title}
-              home={getTeam(match.data().home)}
-              away={getTeam(match.data().away)}
-              stadium={match.data().stadium}
+              id={match.id}
+              season={match.season}
+              title={match.title}
+              home={getTeam(match.home)}
+              away={getTeam(match.away)}
+              stadium={match.stadium}
+              frame={match.frame}
+              handleClick={handleOpenModal}
             />
           ))}
-          {state.league === 'ligue1' && state.data.map((match, index) => (
+          {state.league === 'ligue1' && state.data.length > 0 && state.data.map((match, index) => (
             <Ligue1Component 
               key={index}
-              id={match.ref.id}
-              title={match.data().title}
-              home={getTeam(match.data().home)}
-              away={getTeam(match.data().away)}
+              id={match.id}
+              title={match.title}
+              home={getTeam(match.home)}
+              away={getTeam(match.away)}
+              frame={match.frame}
+              handleClick={handleOpenModal}
             />
           ))}
-          {state.league === 'champions' && state.data.map((match) => (
+          {state.league === 'champions' && state.data.length > 0 && state.data.map((match) => (
             <ChampionsComponent 
-              key={match.ref.id}
-              id={match.ref.id}
-              title={match.data().title}
-              home={getTeam(match.data().home)}
-              away={getTeam(match.data().away)}
-              stadium={match.data().stadium}
+              key={match.id}
+              id={match.id}
+              title={match.title}
+              home={getTeam(match.home)}
+              away={getTeam(match.away)}
+              stadium={match.stadium}
+              frame={match.frame}
+              handleClick={handleOpenModal}
             />
           ))}
         </div>
       </div>
+      <Dialog 
+        open={matchModal.open} 
+        onClose={handleCloseModal} 
+        TransitionComponent={Transition}
+        maxWidth={'lg'}
+        fullWidth={true}
+      >
+        <DialogTitle style={{ padding: '5px 24px' }}>
+          {matchModal.match && generateTitle(matchModal.match)}   
+        </DialogTitle>
+        <DialogContent style={{ padding: '0px' }}>
+          {matchModal.match && (
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+              width: '100%',
+              position: 'relative'
+            }}>
+              <PlayerComponent render={matchModal.match.frame} />
+            </div>
+          )}
+        </DialogContent>
+        <IconButton 
+          style={{ 
+            position: 'absolute', 
+            top: '0', 
+            right: '0',
+          }} 
+          aria-label="close"
+          onClick={handleCloseModal}
+        >
+          <CloseIcon  />
+        </IconButton>
+      </Dialog>
     </div>
   )
 }

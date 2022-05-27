@@ -17,7 +17,9 @@ export const AppContext = createContext({
   createMatch: (league, match) => null,
   updateMatch: (league, match) => null,
   getMatch: (league, matchId) => null,
-  deleteMatch: (league, matchId) => null
+  deleteMatch: (league, matchId) => null,
+  searchMatches: (league, search) => null,
+  getMatchesBySeason: (league, season) => null
 });
 
 export const AppContextProvider = ({ children }) => {
@@ -31,11 +33,16 @@ export const AppContextProvider = ({ children }) => {
     champions: []
   });
 
+  const [teamsMap, setTeamsMap] = useState(new Map());
+
   const storeTeams = (teams) => {
+    let auxMap = new Map();
+    teams.forEach(team => auxMap.set(team.id, team));
     setState(prev => ({
       ...prev,
       teams
     }));
+    setTeamsMap(auxMap);
   }
 
   const createTeam = (team) => {
@@ -53,7 +60,7 @@ export const AppContextProvider = ({ children }) => {
   }
 
   const getTeam = teamId => {
-    return state.teams.find(team => team.id === teamId);
+    return teamsMap.get(teamId);
   }
 
   const deleteTeam = teamId => {
@@ -95,7 +102,28 @@ export const AppContextProvider = ({ children }) => {
     }))
   }
 
-  const { teams, bundesliga, premier, ligue1, laliga, seriea, champions } = state;
+  const getMatchesBySeason = (league, season) => {
+    return state[league].filter(match => match.season === season);
+  }
+
+  const searchMatches = (league, season, search) => {
+    return getMatchesBySeason(league, season).filter(match => {
+      const home = getTeam(match.home);
+      const away = getTeam(match.away);
+      const searchParameter = `${home.name} vs ${away.name} ${match.title}`
+      return searchParameter.includes(search);
+    });
+  }
+
+  const { 
+    teams, 
+    bundesliga, 
+    premier, 
+    ligue1, 
+    laliga, 
+    seriea, 
+    champions 
+  } = state;
 
   return (
     <AppContext.Provider value={{
@@ -115,7 +143,9 @@ export const AppContextProvider = ({ children }) => {
       createMatch, 
       updateMatch, 
       getMatch, 
-      deleteMatch
+      deleteMatch,
+      searchMatches,
+      getMatchesBySeason
     }}>
       {children}
     </AppContext.Provider>

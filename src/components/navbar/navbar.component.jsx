@@ -18,7 +18,7 @@ export const NavbarComponent = () => {
       <Typography variant="h6" style={{flexGrow: 1}}>
           UEFA Leagues
       </Typography>
-      {pathname !== '/' && (
+      {(pathname !== '/' && !pathname.includes('watch')) && (
         <Link to="/dashboard" style={{color: 'white'}}>
           <Button color="inherit">Dashboard</Button>
         </Link>
