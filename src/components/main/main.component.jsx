@@ -28,6 +28,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { PlayerComponent } from '../player/player.component';
 import { MatchTabsComponent } from '../match-tabs/match-tabs.component';
 import { FriendliesComponent } from '../friendlies/friendlies.component';
+import { SearchBarComponent } from '../commons/search-bar/search-bar.component';
 import '../cards.css';
 import './main.styles.css';
 
@@ -155,14 +156,19 @@ export const MainComponent = () => {
     });
   }
 
-  const handleSearch = event => {
-    const { value } = event.target;
+  const handleSearch = value => {
     const search = appContext.searchMatches(state.league, state.season, value);
     setState({
       ...state,
       data: search,
-      searchValue: value
     });
+  }
+
+  const handleCancelSearch = () => {
+    setState({
+      ...state,
+      data: state[state.league]
+    })
   }
 
   const handleOpenModal = (match) => {
@@ -214,21 +220,7 @@ export const MainComponent = () => {
           ))}
         </div>
       {state.data.length > 0 && (
-        <Grid container justifyContent="center" alignItems="center">
-          <Grid item xs={12}>
-            <Paper style={{ padding: '10px', margin: '20px 0' }}>
-              <TextField 
-                fullWidth
-                variant='outlined' 
-                name="search" 
-                type="string"
-                onChange={handleSearch}
-                label="Search"
-                defaultValue={state.searchValue}
-              />
-            </Paper>
-          </Grid>
-        </Grid>
+        <SearchBarComponent onSearch={handleSearch} onCancel={handleCancelSearch} />
       )}
       <div className="tags-scroll">
         {state.seasons.map((season, index) => (

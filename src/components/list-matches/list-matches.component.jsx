@@ -23,6 +23,7 @@ import LEAGUE_OPTIONS from '../../constants/league-options.constant';
 import '../admin.css';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { AppContext } from '../../context/app.context';
+import { SearchBarComponent } from '../commons/search-bar/search-bar.component';
 
 export const ListMatchesComponent = () => {
   const appContext = useContext(AppContext);
@@ -80,11 +81,12 @@ export const ListMatchesComponent = () => {
       }
       return teamData;
     });
+    appContext.storeTeams(teams);
     setState({
       ...state,
       teams,
       loading: false
-    })
+    });
   }
 
   useEffect(() => {
@@ -96,7 +98,7 @@ export const ListMatchesComponent = () => {
     await fetchLeagueMatches(league);
   }
 
-  const getName = (id) => state.teams.find(team => team.id === id).name;
+  const getName = (id) => appContext.getTeam(id).name;
 
   const deleteMatch = async id => {
     swal({
@@ -127,6 +129,29 @@ export const ListMatchesComponent = () => {
     });
   }
 
+  const filterByLeague = (league) => filter(league);
+
+  const handleSearch = (value) => {
+    const searchValue = value.toLowerCase();
+    const filtered = state.data.filter(match => {
+      const home = getName(match.home);
+      const away = getName(match.away);
+      const matchName = `${home} vs ${away} ${match.title} ${match.season} ${match.date}`;
+      return matchName.toLowerCase().includes(searchValue);
+    });
+    setState({
+      ...state,
+      data: filtered
+    });
+  }
+
+  const handleCancel = () => {
+    setState({
+      ...state,
+      data: state[state.league]
+    })
+  }
+
   return state.loading ? (
     <SpinnerComponent />
   ) : (
@@ -146,8 +171,11 @@ export const ListMatchesComponent = () => {
           <Paper className="center-paper">
             <div className="tags-scroll">
               {LEAGUE_OPTIONS.map(league => (
-                <span className="tag" onClick={() => filter(league.value)}>{league.name}</span>
+                <span className="tag" onClick={() => filterByLeague(league.value)}>{league.name}</span>
               ))}
+            </div>
+            <div style={{ width: '100%' }}>
+              <SearchBarComponent onSearch={handleSearch} onCancel={handleCancel} />
             </div>
             {state.data.length > 0 && (
               <TableContainer>
