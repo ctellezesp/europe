@@ -30,31 +30,34 @@ export const EditTeamsComponent = () => {
     name: '',
     img: '',
     league: '',
-    loading: true
+    stadium: '',
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTeam = async teamId => {
       if(appContext.teams.length > 0) {
-        const { name, img, league } = appContext.getTeam(teamId);
+        const { name, img, league, stadium } = appContext.getTeam(teamId);
         setState({
           ...state,
           name,
           img,
           league,
-          loading: false
+          stadium: stadium || ''
         });
+        setLoading(false);
         return;
       }
       const result = await firebase.db.collection("teams").doc(teamId).get();
-      const { name, img, league } = result.data();
+      const { name, img, league, stadium } = result.data();
       setState({
         ...state,
         name,
         img,
         league,
-        loading: false
+        stadium: stadium || ''
       });
+      setLoading(false);
     }
     fetchTeam(state.id);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,14 +85,14 @@ export const EditTeamsComponent = () => {
     })
   }
 
-  return state.loading ? (
+  return loading ? (
     <SpinnerComponent />
   ) : (
     <div className="main">
       <Grid container direction="row" justify="center" alignItems="flex-start" spacing={2}>
         <Grid item xs={12} md={8}>
           <Paper className="center-paper">
-            <h3>Add Team</h3>
+            <h3>Edit Team</h3>
             <TextField
               fullWidth
               id="name"
@@ -106,6 +109,15 @@ export const EditTeamsComponent = () => {
               label="Image"
               variant="outlined"
               defaultValue={state.img}
+              onChange={handleChange}
+            />
+            <TextField
+              fullWidth
+              id="stadium"
+              name="stadium"
+              label="Stadium"
+              variant="outlined"
+              defaultValue={state.stadium}
               onChange={handleChange}
             />
             <FormControl fullWidth variant="outlined">

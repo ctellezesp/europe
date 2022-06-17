@@ -28,7 +28,8 @@ export const AddTeamsComponent = () => {
   const [state, setState] = useState({
     name: '',
     img: '',
-    league: ''
+    league: '',
+    stadium: ''
   });
 
   const handleChange = (event) => {
@@ -70,12 +71,20 @@ export const AddTeamsComponent = () => {
                 name="name"
               />
               <TextField 
-                fullWidth 
+                fullWidth
                 id="img" 
                 label="Img" 
                 variant="outlined" 
                 onChange={handleChange} 
                 name="img"
+              />
+              <TextField
+                fullWidth
+                id="stadium"
+                label="Stadium"
+                variant='outlined'
+                onChange={handleChange}
+                name="stadium"
               />
               <FormControl fullWidth variant="outlined">
                   <InputLabel id="demo-simple-select-outlined-label">League</InputLabel>

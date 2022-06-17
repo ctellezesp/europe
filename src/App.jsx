@@ -10,11 +10,12 @@ import { WatchComponent } from './components/watch/watch.component';
 import { AddTeamsComponent } from './components/add-teams/add-teams.component';
 import { ListTeamsComponent } from './components/list-teams/list-teams.component';
 import { EditTeamsComponent } from './components/edit-team/edit-team.component';
-import { CreateMatchComponent } from './components/create-match/create-match.component';
+import { ItemMatchComponent } from './components/item-match/item-match.component';
 import { ListMatchesComponent } from './components/list-matches/list-matches.component';
-import { EditMatchComponent } from './components/edit-match/edit-match.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { MatchesScript } from './components/scripts/matches.scrip';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   return (
@@ -26,10 +27,11 @@ const App = () => {
         <Route path='/add-team' component={AddTeamsComponent} />
         <Route path='/edit-team/:id' component={EditTeamsComponent} />
         <Route path='/list-teams' component={ListTeamsComponent} />
-        <Route path='/create-match' component={CreateMatchComponent} />
+        <Route path='/create-match' component={ItemMatchComponent} />
         <Route path='/list-matches' component={ListMatchesComponent} />
-        <Route path='/edit-match/:league/:id' component={EditMatchComponent} />
+        <Route path='/edit-match/:league/:id' component={ItemMatchComponent} />
         <Route path='/dashboard' component={DashboardComponent} />
+        <Route path='/scripting' component={MatchesScript} />
       </Switch>
     </Router>
   );

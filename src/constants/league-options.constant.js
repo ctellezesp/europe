@@ -30,6 +30,11 @@ const LEAGUE_OPTIONS = sortByUtil([
     name: 'Champions League',
     value: 'champions',
     image: 'https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/2.png&w=80&h=80&transparent=true'
+  },
+  {
+    name: 'Friendlies',
+    value: 'friendlies',
+    image: 'https://pngimg.com/uploads/fifa/small/fifa_PNG12.png'
   }
 ], 'name');
 

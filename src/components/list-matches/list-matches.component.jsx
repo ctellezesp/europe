@@ -40,7 +40,7 @@ export const ListMatchesComponent = () => {
   });
 
   const fetchLeagueMatches = async (league) => {
-    if(appContext[league].length > 0) {
+    if(appContext[league] && appContext[league].length > 0) {
       setState({
         ...state,
         [league]: appContext[league],

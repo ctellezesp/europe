@@ -26,6 +26,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { PlayerComponent } from '../player/player.component';
+import { MatchTabsComponent } from '../match-tabs/match-tabs.component';
+import { FriendliesComponent } from '../friendlies/friendlies.component';
 import '../cards.css';
 import './main.styles.css';
 
@@ -45,6 +47,7 @@ export const MainComponent = () => {
     seriea: [],
     ligue1: [],
     champions: [],
+    friendlies: [],
     data: [],
     league: '',
     seasons: [],
@@ -71,7 +74,7 @@ export const MainComponent = () => {
 
   const fetchLeague = async (league) => {
     const leagueValue = league.value;
-    if(appContext[leagueValue].length > 0) {
+    if(appContext[leagueValue] && appContext[leagueValue].length > 0) {
       const seasons = new Set();
       const matches = appContext[leagueValue];
       matches.forEach((item) => seasons.add(item.season));
@@ -163,9 +166,6 @@ export const MainComponent = () => {
   }
 
   const handleOpenModal = (match) => {
-    console.log({
-      match
-    })
     setMatchModal({
       match,
       open: true
@@ -276,6 +276,7 @@ export const MainComponent = () => {
               away={getTeam(match.away)}
               title={match.title}
               frame={match.frame}
+              streams={match.streams}
               handleClick={handleOpenModal}
             />
           ))}
@@ -288,6 +289,7 @@ export const MainComponent = () => {
               away={getTeam(match.away)}
               title={match.title}
               frame={match.frame}
+              streams={match.streams}
               handleClick={handleOpenModal}
             />
           ))}
@@ -300,6 +302,7 @@ export const MainComponent = () => {
               away={getTeam(match.away)}
               stadium={match.stadium}
               frame={match.frame}
+              streams={match.streams}
               handleClick={handleOpenModal}
             />
           ))}
@@ -313,6 +316,7 @@ export const MainComponent = () => {
               away={getTeam(match.away)}
               stadium={match.stadium}
               frame={match.frame}
+              streams={match.streams}
               handleClick={handleOpenModal}
             />
           ))}
@@ -324,6 +328,7 @@ export const MainComponent = () => {
               home={getTeam(match.home)}
               away={getTeam(match.away)}
               frame={match.frame}
+              streams={match.streams}
               handleClick={handleOpenModal}
             />
           ))}
@@ -336,6 +341,21 @@ export const MainComponent = () => {
               away={getTeam(match.away)}
               stadium={match.stadium}
               frame={match.frame}
+              streams={match.streams}
+              handleClick={handleOpenModal}
+            />
+          ))}
+          {state.league === 'friendlies' && state.data.length > 0 && state.data.map((match) => (
+            <FriendliesComponent 
+              key={match.id}
+              id={match.id}
+              title={match.title}
+              home={getTeam(match.home)}
+              away={getTeam(match.away)}
+              stadium={match.stadium}
+              frame={match.frame}
+              streams={match.streams}
+              date={match.date}
               handleClick={handleOpenModal}
             />
           ))}
@@ -352,18 +372,21 @@ export const MainComponent = () => {
           {matchModal.match && generateTitle(matchModal.match)}   
         </DialogTitle>
         <DialogContent style={{ padding: '0px' }}>
-          {matchModal.match && (
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-              width: '100%',
-              position: 'relative'
-            }}>
-              <PlayerComponent render={matchModal.match.frame} />
-            </div>
-          )}
+          <div
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							width: '100%',
+						}}
+					>
+						{matchModal.match && matchModal.match.streams.length > 1 ? (
+							<MatchTabsComponent streams={matchModal.match.streams} />
+						) : (
+							<PlayerComponent
+								render={matchModal.match?.streams[0]?.frame || ''}
+							/>
+						)}
+					</div>
         </DialogContent>
         <IconButton 
           style={{ 

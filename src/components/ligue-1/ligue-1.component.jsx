@@ -4,8 +4,8 @@ import { Grid, Paper } from '@material-ui/core';
 
 import '../cards.css';
 
-export const Ligue1Component = ({ id, title, home, away, frame, handleClick }) => {
-  const match = { id, title, home, away, frame };
+export const Ligue1Component = ({ id, title, home, away, frame, streams, handleClick }) => {
+  const match = { id, title, home, away, frame, streams };
   return (
     <Grid item xs={12} onClick={() => handleClick(match)}>
       <Paper elevation={3} className="ligue1">

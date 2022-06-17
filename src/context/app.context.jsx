@@ -8,6 +8,7 @@ export const AppContext = createContext({
   seriea: [],
   ligue1: [],
   champions: [],
+  friendlies: [],
   storeTeams: (teams) => null,
   createTeam: (team) => null,
   updateTeam: (teamId, data) => null,
@@ -30,7 +31,8 @@ export const AppContextProvider = ({ children }) => {
     laliga: [],
     seriea: [],
     ligue1: [],
-    champions: []
+    champions: [],
+    friendlies: []
   });
 
   const [teamsMap, setTeamsMap] = useState(new Map());
@@ -57,6 +59,7 @@ export const AppContextProvider = ({ children }) => {
       ...prev,
       teams: prev.teams.map(team => team.id === teamId ? data : team)
     }))
+    teamsMap.set(teamId, data);
   }
 
   const getTeam = teamId => {

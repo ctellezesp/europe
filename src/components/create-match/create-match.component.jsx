@@ -49,8 +49,13 @@ export const CreateMatchComponent = () => {
         return;
       }
       const { docs } = await firebase.db.collection('teams').orderBy('name', 'asc').get();
+      const teams = docs.map(doc => ({
+        ...doc.data(),
+        id: doc.ref.id
+      }))
+      appContext.storeTeams(teams);
       setState({
-        data: docs,
+        data: teams,
         loading: false
       });
     }
@@ -60,6 +65,14 @@ export const CreateMatchComponent = () => {
 
   const handleChange = event => {
     const {name, value} = event.target;
+    if(name === 'home') {
+      setState({
+        ...state,
+        [name]: value,
+        stadium: appContext.getTeam(value)?.stadium
+      })
+      return;
+    }
     setState({
       ...state,
       [name]: value
@@ -68,7 +81,7 @@ export const CreateMatchComponent = () => {
 
   const setLeague = (event) => {
     const { value } = event.target;
-    const display = value === 'champions' ? state.data : state.data.filter(team => team.data().league === value);
+    const display = value === 'champions' ? state.data : state.data.filter(team => team.league === value);
     setState({
       ...state,
       league: value,
@@ -165,7 +178,7 @@ export const CreateMatchComponent = () => {
                       disabled={!state.league}
                     >
                         {state.teams && state.teams.length > 0 && state.teams.map((team, index) => 
-                          <MenuItem key={index} value={team.ref.id}>{team.data().name}</MenuItem>
+                          <MenuItem key={team.id} value={team.id}>{team.name}</MenuItem>
                         )}
                     </Select>
                 </FormControl>
@@ -182,21 +195,25 @@ export const CreateMatchComponent = () => {
                       disabled={!state.league}
                   >
                       {state.teams && state.teams.length > 0 && state.teams.map((team, index) => 
-                        <MenuItem key={index} value={team.ref.id}>{team.data().name}</MenuItem>
+                        <MenuItem key={team.id} value={team.id}>{team.name}</MenuItem>
                       )}
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
-                <TextField 
-                  fullWidth 
-                  id="stadium" 
-                  name="stadium"
-                  label="Stadium" 
-                  variant="outlined" 
-                  onChange={handleChange} 
-                />
-              </Grid>
+              {state.home && (
+                <Grid item xs={12}>
+                  <TextField 
+                    fullWidth 
+                    id="stadium" 
+                    name="stadium"
+                    label="Stadium" 
+                    variant="outlined" 
+                    disabled={!state.home}
+                    defaultValue={(state.home && appContext.getTeam(state.home)?.stadium) || ''}
+                    onChange={handleChange} 
+                  />
+                </Grid>
+              )}
               <Grid item xs={12}>
                 <TextField 
                   fullWidth 

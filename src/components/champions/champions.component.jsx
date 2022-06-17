@@ -13,9 +13,10 @@ export const ChampionsComponent = ({
   stadium, 
   title, 
   frame,
+  streams,
   handleClick
 }) => {
-  const match = { id, season, title, home, away, stadium, frame };
+  const match = { id, season, title, home, away, stadium, streams, frame };
   return (
     <Grid item xs={12} onClick={() => handleClick(match)}>
       <Paper elevation={3}>

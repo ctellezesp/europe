@@ -1,7 +1,11 @@
+:root {
+  --active: #b5b6ba;
+}
+
 .active-season {
-  background-color: salmon;
+  background-color: var(--active) !important;
 }
 
 .active-league {
-  background-color: steelblue;
+  background-color: var(--active) !important;
 }

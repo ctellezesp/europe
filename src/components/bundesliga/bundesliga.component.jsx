@@ -1,12 +1,11 @@
 import React from 'react';
 
 import { Grid, Paper } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 
 import '../cards.css';
 
-export const BundesligaComponent = ({ id, season, title, home, away, stadium, frame, handleClick }) => {
-  const match = { id, season, title, home, away, stadium, frame };
+export const BundesligaComponent = ({ id, season, title, home, away, stadium, frame, streams, handleClick }) => {
+  const match = { id, season, title, home, away, stadium, frame, streams };
   return (
     <Grid item xs={12} onClick={() => handleClick(match)}>
       <Paper className="bundesliga" elevation={3}>

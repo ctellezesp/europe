@@ -5,8 +5,8 @@ import { Grid, Paper } from '@material-ui/core';
 import PremierLeagueLogo from '../../assets/pl-logo.png';
 import '../cards.css';
 
-export const PremierComponent = ({ id, stadium, home, away, title, frame, handleClick }) => {
-  const match = { id, stadium, home, away, title, frame }
+export const PremierComponent = ({ id, stadium, home, away, title, frame, streams, handleClick }) => {
+  const match = { id, stadium, home, away, title, frame, streams };
   return (
     <Grid item xs={12} onClick={() => handleClick(match)}>
       <Paper elevation={3} className="premier">
