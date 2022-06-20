@@ -8,7 +8,7 @@ export const FriendliesComponent = ({ id, season, title, home, away, stadium, fr
   return (
 		<Paper
 			elevation={2}
-			styles={{ padding: '10px', cursor: 'pointer' }}
+			style={{ padding: '10px', cursor: 'pointer' }}
 			onClick={() => handleClick(match)}
 		>
 			<Grid container spacing={1}>

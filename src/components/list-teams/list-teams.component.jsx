@@ -22,6 +22,7 @@ import { Link } from "react-router-dom";
 
 import '../admin.css';
 import { AppContext } from '../../context/app.context';
+import LEAGUE_OPTIONS from '../../constants/league-options.constant';
 
 export const ListTeamsComponent = () => {
   const appContext = useContext(AppContext);
@@ -114,12 +115,9 @@ export const ListTeamsComponent = () => {
           </Link>
           <Paper className="center-paper">
             <div className="tags-scroll">
-              <span className="tag" onClick={() => filter('premier')}>Premier League</span>
-              <span className="tag" onClick={() => filter('laliga')}>La Liga</span>
-              <span className="tag" onClick={() => filter('bundesliga')}>Bundesliga</span>
-              <span className="tag" onClick={() => filter('seriea')}>Serie A</span>
-              <span className="tag" onClick={() => filter('ligue1')}>Ligue 1</span>
-              <span className="tag" onClick={() => filter('champions')}>Champions</span>
+              {LEAGUE_OPTIONS.map(league => (
+                <span className="tag" onClick={() => filter(league.value)}>{league.name}</span>
+              ))}
             </div>
             {state.teams.length > 0 && <TableContainer>
               <Table style={{ width: "100%" }} aria-label="simple table">
