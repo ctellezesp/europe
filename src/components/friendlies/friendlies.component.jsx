@@ -1,5 +1,6 @@
 import React from 'react';
 import { Paper, Grid, Typography } from '@material-ui/core';
+import moment from 'moment';
 
 import TeamInfoComponent from './team-info.component';
 
@@ -36,7 +37,7 @@ export const FriendliesComponent = ({ id, season, title, home, away, stadium, fr
 						styles={{ padding: '10px' }}
 					>
 						<Typography variant="body1" align="right">
-							{date}
+							{moment(date, 'YYYY-MM-DD').format('DD/MMM/YY')}
 						</Typography>
 					</Grid>
 				</Grid>
