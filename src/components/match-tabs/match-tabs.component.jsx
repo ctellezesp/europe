@@ -62,13 +62,12 @@ export function MatchTabsComponent({ streams }) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="inherit" variant="dense">
         <Tabs
           value={value}
           onChange={handleChange}
           indicatorColor="primary"
           textColor="primary"
-          variant="fullWidth"
           aria-label="full width tabs example"
         >
           {streams.map((stream, index) => (

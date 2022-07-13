@@ -10,10 +10,8 @@ import { SpinnerComponent } from '../spinner/spinner.component';
 import { ChampionsComponent } from '../champions/champions.component';
 import LEAGUE_OPTIONS from '../../constants/league-options.constant';
 import { AppContext } from '../../context/app.context';
-import { 
-  TextField, 
-  Grid, 
-  Paper, 
+import {  
+  Grid,
   Typography, 
   Button,
   Dialog,
@@ -23,8 +21,11 @@ import {
   IconButton
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import ShareIcon from '@material-ui/icons/Share';
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { toast } from 'react-toastify';
+
 import { PlayerComponent } from '../player/player.component';
 import { MatchTabsComponent } from '../match-tabs/match-tabs.component';
 import { FriendliesComponent } from '../friendlies/friendlies.component';
@@ -199,6 +200,14 @@ export const MainComponent = () => {
     ) : '';
   }
 
+  const handleShare = () => {
+    navigator.clipboard.writeText(`${window.location.href}share?league=${state.league}&matchId=${matchModal.match.id}`);
+    toast.info('Link copy to clipboard', {
+      position: toast.POSITION.BOTTOM_RIGHT,
+      hideProgressBar: true
+    });
+  }
+
   return state.loading ? (
     <SpinnerComponent />
     ) : (
@@ -220,7 +229,11 @@ export const MainComponent = () => {
           ))}
         </div>
       {state.data.length > 0 && (
-        <SearchBarComponent onSearch={handleSearch} onCancel={handleCancelSearch} />
+        <Grid container direction="row" justifyContent="center" alignItems="center" style={{ justifyContent: 'center' }}>
+          <Grid item xs={12} md={10} lg={8}>
+            <SearchBarComponent onSearch={handleSearch} onCancel={handleCancelSearch} />
+          </Grid>
+        </Grid>
       )}
       <div className="tags-scroll">
         {state.seasons.map((season, index) => (
@@ -371,26 +384,32 @@ export const MainComponent = () => {
 							width: '100%',
 						}}
 					>
-						{matchModal.match && matchModal.match.streams.length > 1 ? (
+						{matchModal.match && matchModal.match.streams && matchModal.match.streams.length > 1 ? (
 							<MatchTabsComponent streams={matchModal.match.streams} />
 						) : (
 							<PlayerComponent
-								render={matchModal.match?.streams[0]?.frame || ''}
+								render={(matchModal?.match?.streams && matchModal.match?.streams[0]?.frame) || matchModal?.match?.frame || ''}
 							/>
 						)}
 					</div>
         </DialogContent>
-        <IconButton 
-          style={{ 
-            position: 'absolute', 
-            top: '0', 
-            right: '0',
-          }} 
-          aria-label="close"
-          onClick={handleCloseModal}
-        >
-          <CloseIcon  />
-        </IconButton>
+        <div className="modal-actions">
+          <IconButton 
+            aria-label="close"
+            size='small'
+            onClick={handleCloseModal}
+          >
+            <CloseIcon  />
+          </IconButton>
+          <IconButton 
+            color="primary"
+            aria-label="share"
+            size='small'
+            onClick={handleShare}
+          >
+            <ShareIcon  />
+          </IconButton>
+        </div>
       </Dialog>
     </div>
   )

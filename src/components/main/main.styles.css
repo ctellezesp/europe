@@ -9,3 +9,12 @@
 .active-league {
   background-color: var(--active) !important;
 }
+
+.modal-actions {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 5px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
