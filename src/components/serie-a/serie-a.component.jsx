@@ -3,8 +3,8 @@ import React from 'react';
 import { Paper, Grid } from '@material-ui/core';
 import '../cards.css';
 
-export const SerieAComponent = ({ id, title, home, away, stadium, frame, handleClick }) => {
-  const match = { id, title, home, away, stadium, frame };
+export const SerieAComponent = ({ id, title, home, away, stadium, frame, streams, handleClick }) => {
+  const match = { id, title, home, away, stadium, frame, streams };
   return (
     <Grid item xs={12} onClick={() => handleClick(match)}>
       <Paper elevation={3} className="seriea">
