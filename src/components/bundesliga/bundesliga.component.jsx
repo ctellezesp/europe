@@ -13,7 +13,6 @@ export const BundesligaComponent = ({ id, season, title, home, away, stadium, fr
             <div className="bundesliga-comp">
                 <img className="bundesliga-header-img" src="https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/10.png&w=40&h=40&transparent=true" alt="Bundesliga" />
                 <span className="bundesliga-title"><b>BUNDESLIGA</b></span>
-                <span>{season}</span>
             </div>
             <div className="bundesliga-md">
                 <span className="bundesliga-md-text">{title}</span>

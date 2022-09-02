@@ -62,6 +62,7 @@ body {
 .bundesliga-comp {
 	display: flex;
 	width: 70%;
+	align-items: center;
 }
 
 .bundesliga-title {
@@ -304,12 +305,6 @@ body {
 	padding: 10px 0;
 	color: white;
 	text-align: center;
-}
-
-.info-home::after {
-	content: '';
-	width: 10%;
-	background: linear-gradient(90deg, #00197d, #01fd8d);
 }
 
 .info-vs {
