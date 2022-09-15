@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PremierComponent } from '../premier/premier.component';
+import { Premier2022 } from '../premier2/premier2.component';
 import { BundesligaComponent } from '../bundesliga/bundesliga.component';
 import { LaLigaComponent } from '../la-liga/la-liga.component';
 import { SerieAComponent } from '../serie-a/serie-a.component';
@@ -84,7 +84,7 @@ export const LeagueDecider = ({
         />
       )}
       {league === 'premier' && (
-        <PremierComponent 
+        <Premier2022 
           id={id} 
           stadium={stadium}
           home={home}

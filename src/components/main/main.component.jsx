@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, forwardRef } from 'react';
 
 import firebase from '../../firebase/config';
 import { PremierComponent } from '../premier/premier.component';
+import { Premier2022 } from '../premier2/premier2.component';
 import { LaLigaComponent } from '../la-liga/la-liga.component';
 import { SerieAComponent } from '../serie-a/serie-a.component';
 import { BundesligaComponent } from '../bundesliga/bundesliga.component';
@@ -273,7 +274,7 @@ export const MainComponent = () => {
         )}
         <div className="grid-matches">
           {state.league === 'premier' && state.data.length > 0 && state.data.map((match, index) => (
-            <PremierComponent 
+            <Premier2022 
               key={index} 
               id={match.id} 
               stadium={match.stadium}

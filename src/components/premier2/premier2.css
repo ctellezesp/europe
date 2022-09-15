@@ -1,0 +1,103 @@
+.premier2022 {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  background-color: #370b58;
+  background-image: url(https://i.imgur.com/hjiFT3F.png);
+  background-size: cover;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.premier2022-header {
+  padding: 10px 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.premier2022-badge {
+  width: fit-content;
+  display: flex;
+}
+
+.premier2022-badge-logo {
+  display: flex;
+  place-items: center;
+  background-color: #fffffd;
+  border-radius: 5px 0 0 5px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.premier2022-badge-logo-img {
+  width: 20px;
+  height: 20px;
+  padding: 3px;
+}
+
+.premier2022-badge-title {
+  background-color: #62d782;
+  display: flex;
+  place-items: center;
+  padding: 4px 7px;
+  border-radius: 0px 5px 5px 0px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+.premier2022-badge-title > span {
+  text-transform: capitalize;
+  color: #122b3d;
+}
+
+.premier2022-body {
+  display: grid;
+  grid-template-columns: 3fr 1fr 3fr;
+}
+
+.premier2022-team {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.premier2022-team-img {
+  display: flex;
+  width: 70%;
+  height: auto;
+  -webkit-filter: drop-shadow(5px 5px 10px rgb(0, 0, 0, 0.8));
+}
+
+.premier2022-v {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  -webkit-filter: drop-shadow(5px 5px 10px rgb(0, 0, 0, 0.8));
+}
+
+.premier2022-v > span {
+  width: 50%;
+  background-color: #fcfffe;
+  color: #521e6b;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 50%;
+  font-weight: 700;
+}
+
+.premier2022-footer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.premier2022-footer > span {
+  color: #62d782;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  -webkit-filter: drop-shadow(5px 5px 10px rgb(0, 0, 0, 0.8));
+  letter-spacing: 3px;
+}
