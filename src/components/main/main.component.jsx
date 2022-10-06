@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext, forwardRef } from 'react';
 
 import firebase from '../../firebase/config';
-import { PremierComponent } from '../premier/premier.component';
 import { Premier2022 } from '../premier2/premier2.component';
 import { LaLigaComponent } from '../la-liga/la-liga.component';
 import { SerieAComponent } from '../serie-a/serie-a.component';

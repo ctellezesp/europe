@@ -257,18 +257,20 @@ export const ItemMatchComponent = () => {
                             </Select>
                           </FormControl>
                         </Grid>
-                        <Grid item xs={12}>
-                          <TextField 
-                            fullWidth 
-                            id="stadium" 
-                            name="stadium"
-                            label="Stadium" 
-                            variant="outlined" 
-                            disabled={!values.home}
-                            value={values.stadium}
-                            onChange={handleChange} 
-                          />
-                        </Grid>
+                        {values?.home && (
+                          <Grid item xs={12}>
+                            <TextField 
+                              fullWidth 
+                              id="stadium" 
+                              name="stadium"
+                              label="Stadium" 
+                              variant="outlined" 
+                              disabled={!values.home}
+                              value={values.stadium}
+                              onChange={handleChange} 
+                            />
+                          </Grid>
+                        )}
                         <Grid item xs={12}>
                           <Button
                             variant="outlined"
