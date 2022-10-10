@@ -50,7 +50,7 @@ export const AppContextProvider = ({ children }) => {
   const createTeam = (team) => {
     setState(prev => ({
       ...prev,
-      teams: [...prev.teams, team]
+      teams: [team, ...prev.teams]
     }));
   }
 
@@ -83,7 +83,7 @@ export const AppContextProvider = ({ children }) => {
   const createMatch = (league, match) => {
     setState(prev => ({
       ...prev,
-      [league]: [...prev[league], match]
+      [league]: [match, ...prev[league]]
     }));
   }
 

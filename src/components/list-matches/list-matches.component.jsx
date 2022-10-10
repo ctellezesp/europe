@@ -9,7 +9,8 @@ import {
   TableHead,
   TableRow,
   Button,
-  Grid
+  Grid,
+  Typography
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -24,6 +25,8 @@ import '../admin.css';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { AppContext } from '../../context/app.context';
 import { SearchBarComponent } from '../commons/search-bar/search-bar.component';
+import { SeasonsChips } from '../season-chips/season-chips.component';
+import { getSeasons } from '../../utils/get-seasons.util';
 
 export const ListMatchesComponent = () => {
   const appContext = useContext(AppContext);
@@ -37,17 +40,27 @@ export const ListMatchesComponent = () => {
     ligue1: [],
     champions: [],
     league: '',
-    loading: true
+    seasons: [],
+    currentSeason: '',
+    loading: true,
   });
 
+  const [loadingLeague, setLoadingLeague] = useState(false);
+
   const fetchLeagueMatches = async (league) => {
+    setLoadingLeague(true);
     if(appContext[league] && appContext[league].length > 0) {
+      const allSeasons = appContext[league].map(match => match.season);
+      const filteredSeasons = getSeasons(allSeasons);
       setState({
         ...state,
         [league]: appContext[league],
         data: appContext[league],
-        league
+        league,
+        seasons: filteredSeasons,
+        currentSeason: ''
       });
+      setLoadingLeague(false);
       return;
     }
     const { docs } = await firebase.db.collection(league).orderBy('date', 'desc').get();
@@ -55,12 +68,17 @@ export const ListMatchesComponent = () => {
       ...doc.data(),
       id: doc.ref.id
     }))
+    const allSeasons = matches.map(match => match.season);
+    const filteredSeasons = getSeasons(allSeasons);
     setState({
       ...state,
       [league]: matches,
       data: matches,
-      league
+      league,
+      seasons: filteredSeasons,
+      currentSeason: ''
     });
+    setLoadingLeague(false);
     appContext.storeMatches(league, matches);
   }
 
@@ -152,6 +170,15 @@ export const ListMatchesComponent = () => {
     })
   }
 
+  const filterBySeason = (league, season) => {
+    const filterMatches = state[league].filter(match => match.season === season)
+    setState(prevState => ({
+      ...prevState,
+      data: filterMatches,
+      currentSeason: season
+    }))
+  }
+
   return state.loading ? (
     <SpinnerComponent />
   ) : (
@@ -177,6 +204,14 @@ export const ListMatchesComponent = () => {
             <div style={{ width: '100%' }}>
               <SearchBarComponent onSearch={handleSearch} onCancel={handleCancel} />
             </div>
+            {state.league && (
+              <SeasonsChips 
+                seasons={state.seasons} 
+                currentSeason={state.currentSeason} 
+                handleClick={(season) => filterBySeason(state.league, season)} 
+              />
+            )}
+            {loadingLeague && <Typography variant="body1" align="center">Loading..</Typography>}
             {state.data.length > 0 && (
               <TableContainer>
                 <Table style={{ width: "100%" }} aria-label="simple table">

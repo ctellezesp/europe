@@ -30,6 +30,7 @@ import { PlayerComponent } from '../player/player.component';
 import { MatchTabsComponent } from '../match-tabs/match-tabs.component';
 import { FriendliesComponent } from '../friendlies/friendlies.component';
 import { SearchBarComponent } from '../commons/search-bar/search-bar.component';
+import { SeasonsChips } from '../season-chips/season-chips.component';
 import '../cards.css';
 import './main.styles.css';
 
@@ -235,7 +236,7 @@ export const MainComponent = () => {
           </Grid>
         </Grid>
       )}
-      <div className="tags-scroll">
+      {/* <div className="tags-scroll">
         {state.seasons.map((season, index) => (
           <span 
             key={index} 
@@ -245,7 +246,8 @@ export const MainComponent = () => {
             {season}
           </span>
         ))}
-      </div>
+      </div> */}
+      <SeasonsChips seasons={state.seasons} currentSeason={state.season} handleClick={(season) => getMatchesBySeason(state.league, season)} />
       {state.data.length === 0 && state.seasons.length === 0 && (
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
           <img src="https://logodix.com/logo/1999222.png" style={{ height: 'auto', width: '60%' }} alt="UEFA" />

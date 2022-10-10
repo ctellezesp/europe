@@ -1,0 +1,7 @@
+.MuiTabs-root {
+  min-height: 20px !important;
+}
+
+.MuiTab-root {
+  min-height: auto !important;
+}
