@@ -59,4 +59,11 @@
   text-align: center;
   text-transform: uppercase;
   margin: 3px 0;
+  font-size: 14px;
+}
+
+.champions-footer-title {
+  border-top: 0.7px solid #2b4bbe;
+  padding-top: 4px;
+  width: 60%;
 }
