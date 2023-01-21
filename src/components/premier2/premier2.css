@@ -3,9 +3,8 @@
   width: 100%;
   flex-direction: column;
   background-color: #370b58;
-  background-image: url(https://i.imgur.com/hjiFT3F.png);
+  background-image: url(https://i.imgur.com/76Jr9up.jpg);
   background-size: cover;
-  gap: 10px;
   cursor: pointer;
 }
 
@@ -14,7 +13,6 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 10px;
 }
 
 .premier2022-badge {
@@ -89,7 +87,7 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-bottom: 10px;
+  margin: 10px;
 }
 
 .premier2022-footer > span {
