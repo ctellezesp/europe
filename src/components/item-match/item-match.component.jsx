@@ -20,6 +20,8 @@ import { useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import ReactSelect from 'react-select';
+import moment from 'moment';
 
 import LEAGUE_OPTIONS from '../../constants/league-options.constant';
 import { TOASTIFY_CONFIG } from '../../constants/toastify';
@@ -28,14 +30,14 @@ import '../admin.css';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { AppContext } from '../../context/app.context';
 
-
 const FAKE_MATCH = {
   id: '',
   title: '',
   home: '',
   away: '',
   league: '',
-  streams: []
+  streams: [],
+  date: moment().format('YYYY-MM-DD')
 }
 
 const matchSchema = Yup.object().shape({
@@ -87,6 +89,12 @@ export const ItemMatchComponent = () => {
     fetchTeams();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const getSelectTeam = (teamId) => {
+    if(!teamsDisplay.length || !teamId) return null;
+    const { id, name } = teamsDisplay?.find(team => team.id === teamId);
+    return id ? { label: name, value: id } : null
+  };
 
     return loading ? (
       <SpinnerComponent />
@@ -165,6 +173,8 @@ export const ItemMatchComponent = () => {
                     setFieldValue('streams', newOptions);
                   };
 
+                  console.log({ values })
+
                   return (
                     <form onSubmit={handleSubmit}>
                       <Grid container direction="row" justify="center" alignItems="center" spacing={1}>
@@ -220,42 +230,32 @@ export const ItemMatchComponent = () => {
                           </FormControl>
                         </Grid>
                         <Grid item xs={12} md={6}>
-                          <FormControl fullWidth variant="outlined">
-                              <InputLabel id="home-select">Home</InputLabel>
-                              <Select
-                                labelId="home-select"
-                                id="home"
-                                onChange={handleChange}
-                                label="Home"
-                                name="home"
-                                disabled={editMode ? false : !values.league}
-                                value={values.home}
-                              >
-                                  {teamsDisplay.length > 0 && teamsDisplay
-                                    .map((team, index) => 
-                                      <MenuItem key={team.id} value={team.id}>{team.name}</MenuItem>
-                                  )}
-                              </Select>
-                          </FormControl>
+                          <InputLabel id="home-select">Home</InputLabel>
+                          <ReactSelect 
+                            options={
+                              teamsDisplay.length > 0 && teamsDisplay
+                                .map((team) => ({ value: team.id, label: team.name }))} 
+                            placeholder="Home team"
+                            value={getSelectTeam(values.home)}
+                            disabled={editMode ? false : !values.league}
+                            name="home"
+                            onChange={({value}) => setFieldValue('home', value)}
+                            className="select-margin"
+                          />
                         </Grid>
                         <Grid item xs={12} md={6}>
-                          <FormControl fullWidth variant="outlined">
-                            <InputLabel id="away-select">Away</InputLabel>
-                            <Select
-                                labelId="away-select"
-                                id="away"
-                                onChange={handleChange}
-                                name="away"
-                                label="Away"
-                                disabled={editMode ? false : !values.league}
-                                value={values.away}
-                            >
-                                {teamsDisplay.length > 0 && teamsDisplay
-                                  .map((team, index) => 
-                                    <MenuItem key={team.id} value={team.id}>{team.name}</MenuItem>
-                                )}
-                            </Select>
-                          </FormControl>
+                          <InputLabel id="home-select">Away</InputLabel>
+                          <ReactSelect 
+                            options={
+                              teamsDisplay.length > 0 && teamsDisplay
+                                .map((team) => ({ value: team.id, label: team.name }))} 
+                            placeholder="Away team"
+                            value={getSelectTeam(values.away)}
+                            disabled={editMode ? false : !values.league}
+                            name="away"
+                            onChange={({value}) => setFieldValue('away', value)}
+                            className="select-margin"
+                          />
                         </Grid>
                         {values?.home && (
                           <Grid item xs={12}>

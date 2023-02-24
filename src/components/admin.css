@@ -34,3 +34,7 @@ a {
     min-width: 80px;
     cursor: pointer;
 }
+
+.select-margin {
+    margin-bottom: 10px;
+}
