@@ -194,8 +194,8 @@ export const MainComponent = () => {
         alignItems: 'center'
       }}>
         <img height="30px" style={{ margin: '0 10px 0 0' }} src={state.leagueInfo.image} alt={state.leagueInfo.name} />
-        <Typography variant="body1">
-          {isMobile ? `${match.home.name} vs ${match.away.name}` : `${match.home.name} vs ${match.away.name} | ${match.title} | ${state.season}`}
+        <Typography variant="body1" style={{ overflowX: 'scroll', whiteSpace: 'nowrap', width: '80%' }}>
+          {`${match.home.name} vs ${match.away.name} | ${match.title} | ${state.season}`}
           </Typography>
       </div>
     ) : '';
@@ -236,17 +236,6 @@ export const MainComponent = () => {
           </Grid>
         </Grid>
       )}
-      {/* <div className="tags-scroll">
-        {state.seasons.map((season, index) => (
-          <span 
-            key={index} 
-            className={`season MuiPaper-elevation6 ${state.season === season ? 'active-season': ''}`}
-            onClick={() => getMatchesBySeason(state.league, season)}
-          >
-            {season}
-          </span>
-        ))}
-      </div> */}
       <SeasonsChips seasons={state.seasons} currentSeason={state.season} handleClick={(season) => getMatchesBySeason(state.league, season)} />
       {state.data.length === 0 && state.seasons.length === 0 && (
         <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -374,6 +363,7 @@ export const MainComponent = () => {
         TransitionComponent={Transition}
         maxWidth={'lg'}
         fullWidth={true}
+        fullScreen={isMobile}
       >
         <DialogTitle style={{ padding: '5px 24px' }}>
           {matchModal.match && generateTitle(matchModal.match)}   
@@ -384,6 +374,7 @@ export const MainComponent = () => {
 							display: 'flex',
 							flexDirection: 'column',
 							width: '100%',
+              height: '100%'
 						}}
 					>
 						{matchModal.match && matchModal.match.streams && matchModal.match.streams.length > 1 ? (
