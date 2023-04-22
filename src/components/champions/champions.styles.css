@@ -1,6 +1,7 @@
 .champions {
-  background: url(https://uclbranding.uefa.com/assets/img/carousel-1.jpg)!important;
-  background-position: bottom !important;
+  background-color: #040a39;
+  background: url(../../assets/champions-bg.jpg)!important;
+  background-position: center right !important;
   display: flex;
   flex-direction: column;
   color: #FFFFFF;
